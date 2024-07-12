@@ -4,17 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using LibraryManagment.Services;
 using LibraryManagment.DTO.Requests;
 using LibraryManagment.DTO.Responses;
+using LibraryManagment.Interface;
 namespace LibraryManagment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class MembrsController : ControllerBase
     {
-        private readonly MemberServices _memberServices;
+        private readonly IMemberService _memberServices;
         
-        public MembrsController(ApplicationDBcontext dbcontext)
+        public MembrsController(IMemberService memberService)
         {
-            _memberServices = new MemberServices(dbcontext);
+            _memberServices = memberService;
         }
         
         [HttpGet]
@@ -24,10 +25,10 @@ namespace LibraryManagment.Controllers
         [HttpGet]
         [Route("{id:int}")]
 
-        public GetMemberByIdResponseDTO GetMemberById(int id)
+        public IActionResult GetMemberById(int id)
         {
             var memberByIdRequestDTO = new GetMemberByIdRequestDTO { MemberID = id };
-            return (_memberServices.GetMemberById(memberByIdRequestDTO));
+            return Ok(_memberServices.GetMemberById(memberByIdRequestDTO));
             
         }
 
