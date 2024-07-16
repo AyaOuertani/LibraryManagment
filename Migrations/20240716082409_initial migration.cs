@@ -48,23 +48,23 @@ namespace LibraryManagment.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Stock = table.Column<int>(type: "int", nullable: false),
-                    BookCategoryCategoryID = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Books_Categories_BookCategoryCategoryID",
-                        column: x => x.BookCategoryCategoryID,
+                        name: "FK_Books_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "CategoryID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_BookCategoryCategoryID",
+                name: "IX_Books_CategoryId",
                 table: "Books",
-                column: "BookCategoryCategoryID");
+                column: "CategoryId");
         }
 
         /// <inheritdoc />

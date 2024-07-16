@@ -21,7 +21,7 @@ namespace LibraryManagment.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("LibraryManagment.Models.Entities.Books", b =>
+            modelBuilder.Entity("LibraryManagment.Models.Books", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -33,7 +33,7 @@ namespace LibraryManagment.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("BookCategoryCategoryID")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<int>("Stock")
@@ -45,12 +45,12 @@ namespace LibraryManagment.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("BookCategoryCategoryID");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("LibraryManagment.Models.Entities.Category", b =>
+            modelBuilder.Entity("LibraryManagment.Models.Category", b =>
                 {
                     b.Property<int>("CategoryID")
                         .ValueGeneratedOnAdd()
@@ -67,7 +67,7 @@ namespace LibraryManagment.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("LibraryManagment.Models.Entities.Member", b =>
+            modelBuilder.Entity("LibraryManagment.Models.Member", b =>
                 {
                     b.Property<int>("MemberID")
                         .ValueGeneratedOnAdd()
@@ -95,11 +95,11 @@ namespace LibraryManagment.Migrations
                     b.ToTable("Members");
                 });
 
-            modelBuilder.Entity("LibraryManagment.Models.Entities.Books", b =>
+            modelBuilder.Entity("LibraryManagment.Models.Books", b =>
                 {
-                    b.HasOne("LibraryManagment.Models.Entities.Category", "BookCategory")
+                    b.HasOne("LibraryManagment.Models.Category", "BookCategory")
                         .WithMany()
-                        .HasForeignKey("BookCategoryCategoryID")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

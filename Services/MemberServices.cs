@@ -1,6 +1,6 @@
 ﻿using LibraryManagment.Data;
-using LibraryManagment.DTO.Requests;
-using LibraryManagment.DTO.Responses;
+using LibraryManagment.DTO.Members.Requests;
+using LibraryManagment.DTO.Members.Responses;
 using LibraryManagment.Interface;
 using LibraryManagment.Models;
 
@@ -18,9 +18,9 @@ namespace LibraryManagment.Services
 
         public List<Member> GetAllMembers() =>  _dbcontext.Members.ToList();
 
-        public GetMemberByIdResponseDTO GetMemberById(GetMemberByIdRequestDTO memberByIdRequestDTO )
+        public async Task<GetMemberByIdResponseDTO> GetMemberByIdAsync(GetMemberByIdRequestDTO memberByIdRequestDTO )
         {
-            var member = _dbcontext.Members.Find(memberByIdRequestDTO.MemberID);
+            var member =await _dbcontext.Members.FindAsync(memberByIdRequestDTO.MemberID);
             if (member == null)
             {
                 throw new KeyNotFoundException("Memeber Not Found");
@@ -59,6 +59,16 @@ namespace LibraryManagment.Services
             member.Phone = memberRequestDTO.Phone;
             await _dbcontext.SaveChangesAsync();
             return ("Member update successfully !");
+        }
+        public async Task DeleteMemberAsync(DeleteMemberRequestDTO memberRequestDTO)
+        {
+            var member = await _dbcontext.Members.FindAsync(memberRequestDTO.MemberId);
+            if (member is null)
+            {
+                throw new KeyNotFoundException("Member Not Found");
+            }
+            _dbcontext.Members.Remove(member);
+            await _dbcontext.SaveChangesAsync();
         }
     }
 }

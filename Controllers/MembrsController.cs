@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using LibraryManagment.Services;
-using LibraryManagment.DTO.Requests;
-using LibraryManagment.DTO.Responses;
+using LibraryManagment.DTO.Members.Responses;
 using LibraryManagment.Interface;
+using LibraryManagment.DTO.Members.Requests;
 namespace LibraryManagment.Controllers
 {
     [Route("api/[controller]")]
@@ -25,25 +25,38 @@ namespace LibraryManagment.Controllers
         [HttpGet]
         [Route("{id:int}")]
 
-        public IActionResult GetMemberById(int id)
+        public async Task<IActionResult> GetMemberById(int id)
         {
             var memberByIdRequestDTO = new GetMemberByIdRequestDTO { MemberID = id };
-            return Ok(_memberServices.GetMemberById(memberByIdRequestDTO));
+            var results = await _memberServices.GetMemberByIdAsync(memberByIdRequestDTO);
+            return Ok(results);
             
         }
 
         [HttpPost]
 
-        public IActionResult AddMember(AddMemberRequestDTO memberRequestDto)
+        public async Task<IActionResult> AddMemberAsync(AddMemberRequestDTO memberRequestDto)
         {
-            return Ok(_memberServices.AddMemberAsync(memberRequestDto));
+            var result = await _memberServices.AddMemberAsync(memberRequestDto);
+            return Ok(result);
         }
 
         [HttpPut]
         [Route("{id:int}")]
-        public IActionResult UpdateMemeber(UpdateMemberRequestDTO memberRequestDTO)
+        public async Task<IActionResult> UpdateMemeberAsync(UpdateMemberRequestDTO memberRequestDTO)
         {
-            return Ok(_memberServices.UpdateMemberAsync(memberRequestDTO));
+            var result = await _memberServices.UpdateMemberAsync(memberRequestDTO);
+            return Ok(result);
+        }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+
+
+        public async Task<IActionResult> DeleteMemberAsync(DeleteMemberRequestDTO memberRequestDTO)
+        {
+            await _memberServices.DeleteMemberAsync(memberRequestDTO);
+            return Ok();
         }
     }
 }

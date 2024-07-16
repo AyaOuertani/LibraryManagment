@@ -1,6 +1,6 @@
 ﻿using LibraryManagment.Data;
-using LibraryManagment.DTO.Requests;
-using LibraryManagment.DTO.Responses;
+using LibraryManagment.DTO.Members.Requests;
+using LibraryManagment.DTO.Members.Responses;
 using LibraryManagment.Models;
 using LibraryManagment.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,12 +11,13 @@ namespace LibraryManagment.Interface
     {
         public List<Member> GetAllMembers();
 
-        public GetMemberByIdResponseDTO GetMemberById(GetMemberByIdRequestDTO memberByIdRequestDTO);
+        public Task<GetMemberByIdResponseDTO> GetMemberByIdAsync(GetMemberByIdRequestDTO memberByIdRequestDTO);
 
         public  Task<string> AddMemberAsync(AddMemberRequestDTO MemberRequestDto);
 
         public Task<string> UpdateMemberAsync(UpdateMemberRequestDTO updateMemberDto);
 
+        public Task DeleteMemberAsync(DeleteMemberRequestDTO deleteMemberRequestDTO);
 
     }
 }

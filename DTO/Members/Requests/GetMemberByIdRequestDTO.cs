@@ -1,4 +1,4 @@
-﻿namespace LibraryManagment.DTO.Requests
+﻿namespace LibraryManagment.DTO.Members.Requests
 {
     public class GetMemberByIdRequestDTO
     {
