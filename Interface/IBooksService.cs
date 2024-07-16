@@ -7,7 +7,7 @@ namespace LibraryManagment.Interface
 {
     public interface IBooksService
     {
-        public List<Books> GetAllBooks();
+        public Task<IEnumerable<GetAllBooksResponsesDTO>> GetAllBooksAsync();
 
         public Task<GetBookByIdResponseDTO> GetBookByIdAsync(GetBookByIdRequestDTO  bookByIdRequestDTO);
 

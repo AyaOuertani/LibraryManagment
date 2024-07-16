@@ -18,7 +18,10 @@ namespace LibraryManagment.Controllers
             _booksService = bookService;
         }
         [HttpGet]
-        public IActionResult GetAllBooks() => Ok(_booksService.GetAllBooks());
+        public async Task<IActionResult> GetAllBooksAsync() {
+            var result = await _booksService.GetAllBooksAsync();
+            return Ok(result);
+        }
 
         [HttpGet]
         [Route(("{id:int}"))]
@@ -38,7 +41,7 @@ namespace LibraryManagment.Controllers
         }
 
         [HttpGet("category/{category}")]
-        public async Task<IActionResult> GetBookByCategoryAsync(CategoryDTO category)
+        public async Task<IActionResult> GetBookByCategoryAsync([FromRoute] CategoryDTO category)
         {
             var bookByCategoryRequestDTO = new GetBookByCategoryRequestDTO { BookCategory = category };
             var result = await _booksService.GetBookByCategoryAsync(bookByCategoryRequestDTO);

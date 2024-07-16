@@ -15,16 +15,27 @@ namespace LibraryManagment.Services
         {
             _dbcontext = dbcontext;
         }
-        public List<Books> GetAllBooks() => _dbcontext.Books.ToList();
+        public async Task<IEnumerable<GetAllBooksResponsesDTO>> GetAllBooksAsync()
+        {
+            var books = await _dbcontext.Books.Include(bookSelected => bookSelected.BookCategory).Select(bookSelected => new GetAllBooksResponsesDTO
+            {
+                Title = bookSelected.Title,
+                Author = bookSelected.Author,
+                Stock = bookSelected.Stock,
+                BookCategory = bookSelected.BookCategory.CategoryName
+            }).ToListAsync();
 
+            return books;
+        }
         public async Task<GetBookByIdResponseDTO> GetBookByIdAsync(GetBookByIdRequestDTO bookByIdRequestDTO)
         {
-            var book = await _dbcontext.Books.FindAsync(bookByIdRequestDTO.ID);
+            var book = await _dbcontext.Books.Include(bookSelected => bookSelected.BookCategory).FirstOrDefaultAsync(bookSelected => bookSelected.ID == bookByIdRequestDTO.ID);
             if (book is null)
             {
                 throw new KeyNotFoundException("Not Found");
             }
-            return new GetBookByIdResponseDTO { 
+            return new GetBookByIdResponseDTO
+            {
                 Title = book.Title,
                 Author = book.Author,
                 Stock = book.Stock,
@@ -35,7 +46,7 @@ namespace LibraryManagment.Services
 
         public async Task<GetBookByTitleResponseDTO> GetBookByTitleAsync (GetBookByTitleRequestDTO bookByTitleRequestDTO)
         {
-            var book = await _dbcontext.Books.FirstOrDefaultAsync(bookSelected => bookSelected.Title.ToUpper() == bookByTitleRequestDTO.Title.ToUpper());
+            var book = await _dbcontext.Books.Include(bookSelected => bookSelected.BookCategory).FirstOrDefaultAsync(bookSelected => bookSelected.Title.ToUpper() == bookByTitleRequestDTO.Title.ToUpper());
             if (book is null){
                 throw new KeyNotFoundException("Not Found");
             }
@@ -48,13 +59,9 @@ namespace LibraryManagment.Services
 
         public async Task<IEnumerable<GetBookByCategoryResponseDTO>> GetBookByCategoryAsync(GetBookByCategoryRequestDTO bookByCategoryRequestDTO)
         {
-            var book = await _dbcontext.Books.Where(bookSelected => bookSelected.BookCategory.CategoryName.ToUpper() == bookByCategoryRequestDTO.BookCategory.CategoryName.ToUpper()).ToListAsync();
-            if (!book.Any())
-            {
-                throw new KeyNotFoundException("Not Found");
-            }
-
-            return book.Select(bookSelected => new GetBookByCategoryResponseDTO
+            var categoryId = bookByCategoryRequestDTO.CategoryId;
+            var books =  await _dbcontext.Books.Where(bookSelected => bookSelected.BookCategory.CategoryID == categoryId).ToListAsync();
+            return books.Select(bookSelected => new GetBookByCategoryResponseDTO
             {
                 Title = bookSelected.Title,
                 Author = bookSelected.Author,
@@ -64,7 +71,7 @@ namespace LibraryManagment.Services
 
         public async Task<IEnumerable<GetBookByAuthorResponseDTO>> GetBookByAuthorAsync(GetBookByAuthorRequestDTO bookByAuthorRequestDTO)
         {
-            var book = await _dbcontext.Books.Where(bookSelected => bookSelected.Author.ToUpper() ==  bookByAuthorRequestDTO.Author.ToUpper()).ToListAsync();
+            var book = await _dbcontext.Books.Include(bookSelected => bookSelected.BookCategory).Where(bookSelected => bookSelected.Author.ToUpper() ==  bookByAuthorRequestDTO.Author.ToUpper()).ToListAsync();
             if (!book.Any())
             {
                 throw new KeyNotFoundException("Not Found");
@@ -103,7 +110,7 @@ namespace LibraryManagment.Services
                 Title = bookRequestDTO.Title,
                 Author = bookRequestDTO.Author,
                 Stock = bookRequestDTO.Stock,
-                BookCategory = category
+                BookCategory = category,
             };
 
             _dbcontext.Books.Add(addBook);
