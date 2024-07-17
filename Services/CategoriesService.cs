@@ -1,6 +1,7 @@
 ﻿using LibraryManagment.Data;
 using LibraryManagment.DTO.Books.Requests;
 using LibraryManagment.DTO.Category;
+using LibraryManagment.DTOs.Categories;
 using LibraryManagment.Interface;
 using LibraryManagment.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,18 @@ namespace LibraryManagment.Services
         {
             _dbcontext = dbcontext;
         }
-        public List<Category> GetAllCategories() => _dbcontext.Categories.ToList();
+        public async Task<IEnumerable<GetAllCategoriesResponse>> GetAllCategoriesAsync() {
+            var categories = await _dbcontext.Categories.Include(book => book.Books).Select(categorySelected => new GetAllCategoriesResponse
+            {
+                CategoryName = categorySelected.CategoryName,
+                BooksTitle = categorySelected.Books.Select(bookSelected => bookSelected.Title).ToList()
+            }).ToListAsync();
+
+            return categories;
+        }
          public async Task<CategoryDTO> GetCategoryByNameeAsync(CategoryDTO categoryByNameeDTO)
         {
-            var category = await _dbcontext.Categories.FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName.ToUpper() == categoryByNameeDTO.CategoryName.ToUpper());
+            var category = await _dbcontext.Categories.Include(book => book.Books).FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName.ToUpper() == categoryByNameeDTO.CategoryName.ToUpper());
             if (category is null)
              {
                  throw new KeyNotFoundException("Not Found");

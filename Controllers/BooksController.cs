@@ -13,10 +13,8 @@ namespace LibraryManagment.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBooksService _booksService;
-        public BooksController (IBooksService bookService)
-        {
-            _booksService = bookService;
-        }
+        public BooksController(IBooksService bookService) => _booksService = bookService;
+
         [HttpGet]
         public async Task<IActionResult> GetAllBooksAsync() {
             var result = await _booksService.GetAllBooksAsync();
@@ -65,7 +63,6 @@ namespace LibraryManagment.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
         public async Task<IActionResult> UpdateBookAsync(UpdateBookRequestDTO bookRequestDTO)
         {
             var result = await _booksService.UpdateBookAsync(bookRequestDTO);

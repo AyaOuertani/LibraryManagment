@@ -17,8 +17,10 @@ namespace LibraryManagment.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllCategories() => Ok(_categoriesService.GetAllCategories());
-
+        public async Task<IActionResult> GetAllCategoriesAsync() {
+            var result = await _categoriesService.GetAllCategoriesAsync();
+            return Ok(result);
+        }
         [HttpGet("categoryName/{categoryName}")]
         public async Task<IActionResult> GetCategoryByNameeAsync(string categoryName)
         {
