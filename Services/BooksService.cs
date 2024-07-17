@@ -59,8 +59,12 @@ namespace LibraryManagment.Services
 
         public async Task<IEnumerable<GetBookByCategoryResponseDTO>> GetBookByCategoryAsync(GetBookByCategoryRequestDTO bookByCategoryRequestDTO)
         {
-            var categoryId = bookByCategoryRequestDTO.CategoryId;
-            var books =  await _dbcontext.Books.Where(bookSelected => bookSelected.BookCategory.CategoryID == categoryId).ToListAsync();
+            var category = await _dbcontext.Categories.FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName == bookByCategoryRequestDTO.CategoryName);
+            if (category == null)
+            {
+                throw new KeyNotFoundException("Not Found"); 
+            }
+            var books =  await _dbcontext.Books.Where(bookSelected => bookSelected.BookCategory.CategoryID == category.CategoryID).ToListAsync();
             return books.Select(bookSelected => new GetBookByCategoryResponseDTO
             {
                 Title = bookSelected.Title,
@@ -119,15 +123,16 @@ namespace LibraryManagment.Services
             return "Book Added Successfully!";
         }
 
-        public async Task DeleteBookAsync(DeleteBookRequestDTO bookRequestDTO)
+        public async Task<string> DeleteBookAsync(DeleteBookRequestDTO bookRequestDTO)
         {
-            var book = await _dbcontext.Books.FindAsync(bookRequestDTO.ID);
+            var book = await _dbcontext.Books.FirstOrDefaultAsync(BookSelected => BookSelected.Title.ToUpper() == bookRequestDTO.BookName.ToUpper());
             if (book is null)
             {
                 throw new KeyNotFoundException("Not Found");
             }
             _dbcontext.Books.Remove(book);
             await _dbcontext.SaveChangesAsync();
+            return ("Deleted Saccussefully");
         }
 
     }

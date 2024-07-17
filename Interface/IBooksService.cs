@@ -21,6 +21,6 @@ namespace LibraryManagment.Interface
 
         public Task<string> UpdateBookAsync(UpdateBookRequestDTO bookRequestDto);
 
-        public Task DeleteBookAsync(DeleteBookRequestDTO bookRequestDTO);
+        public Task<string> DeleteBookAsync(DeleteBookRequestDTO bookRequestDTO);
     }
 }

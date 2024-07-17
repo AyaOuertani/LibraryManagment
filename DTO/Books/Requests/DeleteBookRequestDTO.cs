@@ -2,6 +2,6 @@
 {
     public class DeleteBookRequestDTO
     {
-        public int ID { get; set; }
+        public string BookName{ get; set; } = string.Empty; 
     }
 }

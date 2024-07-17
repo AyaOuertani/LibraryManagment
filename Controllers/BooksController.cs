@@ -41,9 +41,9 @@ namespace LibraryManagment.Controllers
         }
 
         [HttpGet("category/{category}")]
-        public async Task<IActionResult> GetBookByCategoryAsync([FromRoute] CategoryDTO category)
+        public async Task<IActionResult> GetBookByCategoryAsync([FromRoute] string category)
         {
-            var bookByCategoryRequestDTO = new GetBookByCategoryRequestDTO { BookCategory = category };
+            var bookByCategoryRequestDTO = new GetBookByCategoryRequestDTO { CategoryName = category};
             var result = await _booksService.GetBookByCategoryAsync(bookByCategoryRequestDTO);
             return Ok(result);
         }
@@ -72,10 +72,10 @@ namespace LibraryManagment.Controllers
             return Ok(result);
         }
 
-        [HttpDelete]
-        [Route("{id:int}")]
-        public async Task<IActionResult> DeleteBookAsync(DeleteBookRequestDTO bookRequestDTO)
+        [HttpDelete ("book/{book}")]
+        public async Task<IActionResult> DeleteBookAsync(string book )
         {
+            var bookRequestDTO = new DeleteBookRequestDTO {BookName = book};
             await _booksService.DeleteBookAsync(bookRequestDTO);
             return Ok();
         }
