@@ -1,7 +1,7 @@
-﻿using LibraryManagment.DTO.Category;
+﻿
 using LibraryManagment.Models;
 
-namespace LibraryManagment.DTO.Books.Responses
+namespace LibraryManagment.DTOs.BooksDTOs.Responses
 {
     public class GetBookByIdResponse
     {

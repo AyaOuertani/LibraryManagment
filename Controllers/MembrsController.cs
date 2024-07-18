@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using LibraryManagment.Services;
-using LibraryManagment.DTO.Members.Responses;
+using LibraryManagment.DTOs.MembersDTOs.Responses;
 using LibraryManagment.Interface;
-using LibraryManagment.DTO.Members.Requests;
+using LibraryManagment.DTOs.MembersDTOs.Requests;
 namespace LibraryManagment.Controllers
 {
     [Route("api/[controller]")]
@@ -33,16 +33,16 @@ namespace LibraryManagment.Controllers
 
         [HttpPost]
 
-        public async Task<IActionResult> AddAsync(AddMemberRequest memberRequestDto)
+        public async Task<IActionResult> AddAsync(AddMemberRequest memberRequest)
         {
-            var result = await _memberServices.AddAsync(memberRequestDto);
+            var result = await _memberServices.AddAsync(memberRequest);
             return Ok(result);
         }
 
         [HttpPut("id/{id}")]
-        public async Task<IActionResult> UpdateAsync(UpdateMemberRequest memberRequestDTO)
+        public async Task<IActionResult> UpdateAsync(UpdateMemberRequest memberRequest)
         {
-            var result = await _memberServices.UpdateAsync(memberRequestDTO);
+            var result = await _memberServices.UpdateAsync(memberRequest);
             return Ok(result);
         }
 

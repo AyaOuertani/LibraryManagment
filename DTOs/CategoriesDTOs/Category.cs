@@ -1,5 +1,5 @@
 ﻿using LibraryManagment.Models;
-namespace LibraryManagment.DTO.Category
+namespace LibraryManagment.DTOs.CategoryDTOs
 {
     public class Category
     {

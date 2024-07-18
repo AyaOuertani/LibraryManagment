@@ -1,6 +1,6 @@
 ﻿using LibraryManagment.Data;
-using LibraryManagment.DTO.Members.Requests;
-using LibraryManagment.DTO.Members.Responses;
+using LibraryManagment.DTOs.MembersDTOs.Requests;
+using LibraryManagment.DTOs.MembersDTOs.Responses;
 using LibraryManagment.Models;
 using LibraryManagment.Services;
 using Microsoft.AspNetCore.Mvc;

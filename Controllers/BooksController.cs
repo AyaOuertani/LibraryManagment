@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using LibraryManagment.Interface;
-using LibraryManagment.DTO.Books.Requests;
+using LibraryManagment.DTOs.BooksDTOs.Requests;
 using LibraryManagment.Models;
-using LibraryManagment.DTO.Category;
 using LibraryManagment.Services;
 
 namespace LibraryManagment.Controllers
@@ -51,16 +50,16 @@ namespace LibraryManagment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync (AddBookRequest bookRequestDTO)
+        public async Task<IActionResult> AddAsync (AddBookRequest bookRequest)
         {
-            var result = await _booksService.AddAsync(bookRequestDTO);
+            var result = await _booksService.AddAsync(bookRequest);
             return Ok(result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync(UpdateBookRequest bookRequestDTO)
+        public async Task<IActionResult> UpdateAsync(UpdateBookRequest bookRequest)
         {
-            var result = await _booksService.UpdateAsync(bookRequestDTO);
+            var result = await _booksService.UpdateAsync(bookRequest);
             return Ok(result);
         }
 

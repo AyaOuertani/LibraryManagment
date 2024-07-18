@@ -1,5 +1,4 @@
-﻿using LibraryManagment.DTO.Category;
-namespace LibraryManagment.DTO.Books.Requests
+﻿namespace LibraryManagment.DTOs.BooksDTOs.Requests
 {
     public class UpdateBookRequest
     {

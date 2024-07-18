@@ -1,6 +1,6 @@
 ﻿using LibraryManagment.Data;
-using LibraryManagment.DTO.Books.Requests;
-using LibraryManagment.DTO.Books.Responses;
+using LibraryManagment.DTOs.BooksDTOs.Requests;
+using LibraryManagment.DTOs.BooksDTOs.Responses;
 using LibraryManagment.Interface;
 using LibraryManagment.Models;
 using Microsoft.AspNetCore.Http.HttpResults;

@@ -1,6 +1,6 @@
 ﻿using LibraryManagment.Models;
-using LibraryManagment.DTO.Books.Requests;
-using LibraryManagment.DTO.Books.Responses;
+using LibraryManagment.DTOs.BooksDTOs.Requests;
+using LibraryManagment.DTOs.BooksDTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagment.Interface

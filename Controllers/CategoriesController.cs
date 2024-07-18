@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using LibraryManagment.Interface;
-using LibraryManagment.DTO.Category;
+using LibraryManagment.DTOs.CategoryDTOs;
 using LibraryManagment.Services;
 
 namespace LibraryManagment.Controllers
@@ -29,9 +29,9 @@ namespace LibraryManagment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(Category categoryDTO)
+        public async Task<IActionResult> AddAsync(Category category)
         {
-            var result = await _categoriesService.AddAsync(categoryDTO);
+            var result = await _categoriesService.AddAsync(category);
             return Ok(result);
         }
 

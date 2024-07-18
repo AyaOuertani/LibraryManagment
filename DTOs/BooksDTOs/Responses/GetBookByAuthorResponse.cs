@@ -1,12 +1,12 @@
-﻿using LibraryManagment.DTO.Category;
+﻿
 using LibraryManagment.Models;
 
-namespace LibraryManagment.DTO.Books.Responses
+namespace LibraryManagment.DTOs.BooksDTOs.Responses
 {
     public class GetBookByAuthorResponse
     {
         public required string Title { get; set; }
         public int Stock { get; set; }
-        public String BookCategory { get; set; }
+        public string BookCategory { get; set; }
     }
 }

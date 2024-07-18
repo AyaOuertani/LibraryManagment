@@ -1,5 +1,4 @@
-﻿using LibraryManagment.DTO.Category;
-namespace LibraryManagment.DTO.Books.Responses
+﻿namespace LibraryManagment.DTOs.BooksDTOs.Responses
 {
     public class GetAllBooksResponses
     {

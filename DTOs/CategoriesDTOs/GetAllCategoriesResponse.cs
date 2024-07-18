@@ -1,4 +1,4 @@
-﻿namespace LibraryManagment.DTOs.Categories
+﻿namespace LibraryManagment.DTOs.CategoryDTOs
 {
     public class GetAllCategoriesResponse
     {

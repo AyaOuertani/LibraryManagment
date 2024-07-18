@@ -13,10 +13,16 @@ namespace LibraryManagment.Controllers
         {
             _loanService = loanService;
         }
-        [HttpGet]
-        public async Task<IActionResult> GetBooksLoanAync()
+        [HttpGet("Name/{Name}")]
+        public async Task<IActionResult> GetBooksLoanAync(string Name)
         {
-            var result = await _loanService.GetBookLoansAsync();
+            var result = await _loanService.GetBookLoansAsync(Name);
+            return Ok(result);
+        }
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetMemberLoanAsync(int id)
+        {
+            var result = await _loanService.GetMemberLoansAsync(id);
             return Ok(result);
         }
     }

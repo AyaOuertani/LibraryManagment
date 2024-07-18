@@ -1,7 +1,6 @@
 ﻿using LibraryManagment.Data;
-using LibraryManagment.DTO.Books.Requests;
-using LibraryManagment.DTO.Category;
-using LibraryManagment.DTOs.Categories;
+using LibraryManagment.DTOs.BooksDTOs.Requests;
+using LibraryManagment.DTOs.CategoryDTOs;
 using LibraryManagment.Interface;
 using LibraryManagment.Models;
 using Microsoft.EntityFrameworkCore;
@@ -39,7 +38,7 @@ namespace LibraryManagment.Services
 
         }
 
-        public async Task<string> AddAsync(DTO.Category.Category category)
+        public async Task<string> AddAsync(DTOs.CategoryDTOs.Category category)
         {
             var addcategory = new Models.Category()
             {

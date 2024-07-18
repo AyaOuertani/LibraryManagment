@@ -1,4 +1,4 @@
-﻿namespace LibraryManagment.DTO.Members.Requests
+﻿namespace LibraryManagment.DTOs.MembersDTOs.Requests
 {
     public class AddMemberRequest
     {

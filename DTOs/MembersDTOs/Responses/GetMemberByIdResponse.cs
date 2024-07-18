@@ -1,4 +1,4 @@
-﻿namespace LibraryManagment.DTO.Members.Responses
+﻿namespace LibraryManagment.DTOs.MembersDTOs.Responses
 {
     public class GetMemberByIdResponse
     {
