@@ -1,19 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using LibraryManagment.Models;
-using LibraryManagment.DTO.Category;
 using LibraryManagment.DTOs.Categories;
 
 namespace LibraryManagment.Interface
 {
     public interface ICategoriesService
     {
-        public Task<IEnumerable<GetAllCategoriesResponse>> GetAllCategoriesAsync();
+        public Task<IEnumerable<GetAllCategoriesResponse>> GetAllAsync();
 
-        public Task<CategoryDTO> GetCategoryByNameeAsync(CategoryDTO categoryByNameeDTO);
+        public Task<GetAllCategoriesResponse> GetByNameeAsync(string categoryName);
 
-        public Task<string> AddCategoryAsync(CategoryDTO categoryDTO);
+        public Task<string> AddAsync(DTO.Category.Category category);
 
-        public Task DeleteCategoryAsync(CategoryDTO categoryDTO);
+        public Task<string> DeleteAsync(string categoryName);
     }
 
 }

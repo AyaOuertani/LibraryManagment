@@ -20,43 +20,37 @@ namespace LibraryManagment.Controllers
         
         [HttpGet]
         
-        public IActionResult GetAllMemebrs() => Ok(_memberServices.GetAllMembers());
+        public IActionResult GetAll() => Ok(_memberServices.GetAll());
         
-        [HttpGet]
-        [Route("{id:int}")]
+        [HttpGet("id/{id}")]
 
-        public async Task<IActionResult> GetMemberById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            var memberByIdRequestDTO = new GetMemberByIdRequestDTO { MemberID = id };
-            var results = await _memberServices.GetMemberByIdAsync(memberByIdRequestDTO);
+            var results = await _memberServices.GetByIdAsync(id);
             return Ok(results);
             
         }
 
         [HttpPost]
 
-        public async Task<IActionResult> AddMemberAsync(AddMemberRequestDTO memberRequestDto)
+        public async Task<IActionResult> AddAsync(AddMemberRequest memberRequestDto)
         {
-            var result = await _memberServices.AddMemberAsync(memberRequestDto);
+            var result = await _memberServices.AddAsync(memberRequestDto);
             return Ok(result);
         }
 
-        [HttpPut]
-        [Route("{id:int}")]
-        public async Task<IActionResult> UpdateMemeberAsync(UpdateMemberRequestDTO memberRequestDTO)
+        [HttpPut("id/{id}")]
+        public async Task<IActionResult> UpdateAsync(UpdateMemberRequest memberRequestDTO)
         {
-            var result = await _memberServices.UpdateMemberAsync(memberRequestDTO);
+            var result = await _memberServices.UpdateAsync(memberRequestDTO);
             return Ok(result);
         }
 
-        [HttpDelete]
-        [Route("{id:int}")]
-
-
-        public async Task<IActionResult> DeleteMemberAsync(DeleteMemberRequestDTO memberRequestDTO)
+        [HttpDelete("id/{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            await _memberServices.DeleteMemberAsync(memberRequestDTO);
-            return Ok();
+            var result=await _memberServices.DeleteAsync(id);
+            return Ok(result);
         }
     }
 }

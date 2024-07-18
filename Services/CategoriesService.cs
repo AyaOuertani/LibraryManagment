@@ -15,7 +15,7 @@ namespace LibraryManagment.Services
         {
             _dbcontext = dbcontext;
         }
-        public async Task<IEnumerable<GetAllCategoriesResponse>> GetAllCategoriesAsync() {
+        public async Task<IEnumerable<GetAllCategoriesResponse>> GetAllAsync() {
             var categories = await _dbcontext.Categories.Include(book => book.Books).Select(categorySelected => new GetAllCategoriesResponse
             {
                 CategoryName = categorySelected.CategoryName,
@@ -24,24 +24,26 @@ namespace LibraryManagment.Services
 
             return categories;
         }
-         public async Task<CategoryDTO> GetCategoryByNameeAsync(CategoryDTO categoryByNameeDTO)
+         public async Task<GetAllCategoriesResponse> GetByNameeAsync(string categoryName)
         {
-            var category = await _dbcontext.Categories.Include(book => book.Books).FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName.ToUpper() == categoryByNameeDTO.CategoryName.ToUpper());
+            var category = await _dbcontext.Categories.Include(book => book.Books).FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName.ToUpper() == categoryName.ToUpper());
             if (category is null)
              {
                  throw new KeyNotFoundException("Not Found");
              }
-            return new CategoryDTO
+            return new GetAllCategoriesResponse
             {
-                CategoryName = category.CategoryName
-             };
+                CategoryName = category.CategoryName,
+                BooksTitle = category.Books.Select(bookSelected => bookSelected.Title).ToList(),
+            };
+
         }
 
-        public async Task<string> AddCategoryAsync(CategoryDTO categoryDTO)
+        public async Task<string> AddAsync(DTO.Category.Category category)
         {
-            var addcategory = new Category()
+            var addcategory = new Models.Category()
             {
-                CategoryName=categoryDTO.CategoryName,
+                CategoryName= category.CategoryName,
             };
 
             _dbcontext.Categories.Add(addcategory);
@@ -50,15 +52,16 @@ namespace LibraryManagment.Services
             return "Category Added Successfully!";
         }
 
-        public async Task DeleteCategoryAsync(CategoryDTO categoryDTO)
+        public async Task<string> DeleteAsync(string categoryName)
         {
-            var category = await _dbcontext.Categories.FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName.ToUpper() == categoryDTO.CategoryName.ToUpper());
+            var category = await _dbcontext.Categories.FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName.ToUpper() == categoryName.ToUpper());
             if (category is null)
             {
                 throw new KeyNotFoundException("Not Found");
             }
             _dbcontext.Categories.Remove(category);
             await _dbcontext.SaveChangesAsync();
+            return ("Deleted Successfully");
         }
     }
 }

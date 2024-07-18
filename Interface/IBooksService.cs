@@ -7,20 +7,20 @@ namespace LibraryManagment.Interface
 {
     public interface IBooksService
     {
-        public Task<IEnumerable<GetAllBooksResponsesDTO>> GetAllBooksAsync();
+        public Task<IEnumerable<GetAllBooksResponses>> GetAllAsync();
 
-        public Task<GetBookByIdResponseDTO> GetBookByIdAsync(GetBookByIdRequestDTO  bookByIdRequestDTO);
+        public Task<GetBookByIdResponse> GetByIdAsync(int id);
 
-        public Task<GetBookByTitleResponseDTO> GetBookByTitleAsync(GetBookByTitleRequestDTO bookByTitleRequestDTO);
+        public Task<GetBookByTitleResponse> GetByTitleAsync(string title);
 
-        public Task<IEnumerable<GetBookByCategoryResponseDTO>> GetBookByCategoryAsync(GetBookByCategoryRequestDTO bookByCategoryRequestDTO);
+        public Task<IEnumerable<GetBookByCategoryResponse>> GetByCategoryAsync(string categooryName);
 
-        public Task<IEnumerable<GetBookByAuthorResponseDTO>> GetBookByAuthorAsync(GetBookByAuthorRequestDTO bookByAuthorRequestDTO);
+        public Task<IEnumerable<GetBookByAuthorResponse>> GetByAuthorAsync(string auther);
 
-        public Task<string> AddBookAsync(AddBookRequestDTO bookRequestDTO);
+        public Task<string> AddAsync(AddBookRequest bookRequest);
 
-        public Task<string> UpdateBookAsync(UpdateBookRequestDTO bookRequestDto);
+        public Task<string> UpdateAsync(UpdateBookRequest bookRequest);
 
-        public Task<string> DeleteBookAsync(DeleteBookRequestDTO bookRequestDTO);
+        public Task<string> DeleteAsync(string bookName);
     }
 }

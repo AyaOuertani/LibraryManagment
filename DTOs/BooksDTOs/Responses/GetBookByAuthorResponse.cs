@@ -3,7 +3,7 @@ using LibraryManagment.Models;
 
 namespace LibraryManagment.DTO.Books.Responses
 {
-    public class GetBookByAuthorResponseDTO
+    public class GetBookByAuthorResponse
     {
         public required string Title { get; set; }
         public int Stock { get; set; }

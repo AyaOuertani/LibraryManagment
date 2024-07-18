@@ -16,16 +16,16 @@ namespace LibraryManagment.Services
             _dbcontext = dbcontext;
         }
 
-        public List<Member> GetAllMembers() =>  _dbcontext.Members.ToList();
+        public List<Member> GetAll() =>  _dbcontext.Members.ToList();
 
-        public async Task<GetMemberByIdResponseDTO> GetMemberByIdAsync(GetMemberByIdRequestDTO memberByIdRequestDTO )
+        public async Task<GetMemberByIdResponse> GetByIdAsync(int id)
         {
-            var member =await _dbcontext.Members.FindAsync(memberByIdRequestDTO.MemberID);
+            var member =await _dbcontext.Members.FindAsync(id);
             if (member == null)
             {
                 throw new KeyNotFoundException("Memeber Not Found");
             }
-            return new GetMemberByIdResponseDTO {
+            return new GetMemberByIdResponse {
                     Name = member.Name,
                     Age = member.Age,
                     Email = member.Email,
@@ -33,42 +33,43 @@ namespace LibraryManagment.Services
             } ;
         }
 
-        public async Task<string> AddMemberAsync(AddMemberRequestDTO MemberRequestDto)
+        public async Task<string> AddAsync(AddMemberRequest MemberRequest)
         {
             var Addmember = new Member()
             {
-                Name = MemberRequestDto.Name,
-                Age = MemberRequestDto.Age,
-                Email = MemberRequestDto.Email,
-                Phone = MemberRequestDto.Phone,
+                Name = MemberRequest.Name,
+                Age = MemberRequest.Age,
+                Email = MemberRequest.Email,
+                Phone = MemberRequest.Phone,
             };
             _dbcontext.Members.Add(Addmember);
             await _dbcontext.SaveChangesAsync();
             return ("Member added successfully !");
         }
-        public async Task<string> UpdateMemberAsync(UpdateMemberRequestDTO memberRequestDTO)
+        public async Task<string> UpdateAsync(UpdateMemberRequest memberRequest)
         {
-            var member = _dbcontext.Members.Find(memberRequestDTO.MemberID);
+            var member = _dbcontext.Members.Find(memberRequest.MemberID);
             if (member == null)
             {
                 throw new KeyNotFoundException("Memeber Not Found");
             }
 
-            member.Age = memberRequestDTO.Age;
-            member.Email = memberRequestDTO.Email;
-            member.Phone = memberRequestDTO.Phone;
+            member.Age = memberRequest.Age;
+            member.Email = memberRequest.Email;
+            member.Phone = memberRequest.Phone;
             await _dbcontext.SaveChangesAsync();
             return ("Member update successfully !");
         }
-        public async Task DeleteMemberAsync(DeleteMemberRequestDTO memberRequestDTO)
+        public async Task<string> DeleteAsync(int id)
         {
-            var member = await _dbcontext.Members.FindAsync(memberRequestDTO.MemberId);
+            var member = await _dbcontext.Members.FindAsync(id);
             if (member is null)
             {
                 throw new KeyNotFoundException("Member Not Found");
             }
             _dbcontext.Members.Remove(member);
             await _dbcontext.SaveChangesAsync();
+            return ("Deleted Successfully");
         }
     }
 }

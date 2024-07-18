@@ -10,6 +10,7 @@ namespace LibraryManagment.Extantions
             services.AddScoped<IMemberService, MemberServices>();
             services.AddScoped<IBooksService, BooksService>();
             services.AddScoped<ICategoriesService, CategoriesService>();
+            services.AddScoped<ILoanService, LoanService>();
             return services;
         }
      }

@@ -9,15 +9,15 @@ namespace LibraryManagment.Interface
 {
     public interface IMemberService
     {
-        public List<Member> GetAllMembers();
+        public List<Member> GetAll();
 
-        public Task<GetMemberByIdResponseDTO> GetMemberByIdAsync(GetMemberByIdRequestDTO memberByIdRequestDTO);
+        public Task<GetMemberByIdResponse> GetByIdAsync(int id);
 
-        public  Task<string> AddMemberAsync(AddMemberRequestDTO MemberRequestDto);
+        public  Task<string> AddAsync(AddMemberRequest MemberRequest);
 
-        public Task<string> UpdateMemberAsync(UpdateMemberRequestDTO updateMemberDto);
+        public Task<string> UpdateAsync(UpdateMemberRequest updateMember);
 
-        public Task DeleteMemberAsync(DeleteMemberRequestDTO deleteMemberRequestDTO);
+        public Task<string> DeleteAsync(int id);
 
     }
 }

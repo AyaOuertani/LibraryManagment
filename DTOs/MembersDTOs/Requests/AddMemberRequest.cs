@@ -1,8 +1,8 @@
-﻿namespace LibraryManagment.DTO.Members.Responses
+﻿namespace LibraryManagment.DTO.Members.Requests
 {
-    public class GetMemberByIdResponseDTO
+    public class AddMemberRequest
     {
-        public required string Name { get; set; }
+        public required string Name { get; set;}
         public int Age { get; set; }
         public string Email { get; set; } = string.Empty;
         public required string Phone { get; set; }

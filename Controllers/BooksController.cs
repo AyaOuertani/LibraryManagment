@@ -16,65 +16,59 @@ namespace LibraryManagment.Controllers
         public BooksController(IBooksService bookService) => _booksService = bookService;
 
         [HttpGet]
-        public async Task<IActionResult> GetAllBooksAsync() {
-            var result = await _booksService.GetAllBooksAsync();
+        public async Task<IActionResult> GetAllAsync() {
+            var result = await _booksService.GetAllAsync();
             return Ok(result);
         }
 
-        [HttpGet]
-        [Route(("{id:int}"))]
-        public async Task<IActionResult> GetBookByIdAsync(int id)
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
-            var bookByIdRequestDTO = new GetBookByIdRequestDTO { ID = id };
-            var result = await _booksService.GetBookByIdAsync(bookByIdRequestDTO);
+            var result = await _booksService.GetByIdAsync(id);
             return Ok(result);
         }
 
         [HttpGet("title/{title}")]
-        public async Task<IActionResult> GetBookByTitleAsync(string title)
+        public async Task<IActionResult> GetByTitleAsync(string title)
         {
-            var bookByTitleRequestDTO = new GetBookByTitleRequestDTO { Title = title };
-            var result = await _booksService.GetBookByTitleAsync(bookByTitleRequestDTO);
+            var result = await _booksService.GetByTitleAsync(title);
             return Ok(result);
         }
 
         [HttpGet("category/{category}")]
-        public async Task<IActionResult> GetBookByCategoryAsync([FromRoute] string category)
+        public async Task<IActionResult> GetByCategoryAsync( string category)
         {
-            var bookByCategoryRequestDTO = new GetBookByCategoryRequestDTO { CategoryName = category};
-            var result = await _booksService.GetBookByCategoryAsync(bookByCategoryRequestDTO);
+            var result = await _booksService.GetByCategoryAsync(category);
             return Ok(result);
         }
 
         [HttpGet("auther/{auther}")]
 
-        public async Task<IActionResult> GetBookByAuthorAsync(string auther)
+        public async Task<IActionResult> GetByAuthorAsync(string auther)
         {
-            var bookByAutherRequestDTO = new GetBookByAuthorRequestDTO { Author = auther };
-            var result = await _booksService.GetBookByAuthorAsync(bookByAutherRequestDTO);
+            var result = await _booksService.GetByAuthorAsync(auther);
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddBookAsync (AddBookRequestDTO bookRequestDTO)
+        public async Task<IActionResult> AddAsync (AddBookRequest bookRequestDTO)
         {
-            var result = await _booksService.AddBookAsync(bookRequestDTO);
+            var result = await _booksService.AddAsync(bookRequestDTO);
             return Ok(result);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateBookAsync(UpdateBookRequestDTO bookRequestDTO)
+        public async Task<IActionResult> UpdateAsync(UpdateBookRequest bookRequestDTO)
         {
-            var result = await _booksService.UpdateBookAsync(bookRequestDTO);
+            var result = await _booksService.UpdateAsync(bookRequestDTO);
             return Ok(result);
         }
 
         [HttpDelete ("book/{book}")]
-        public async Task<IActionResult> DeleteBookAsync(string book )
+        public async Task<IActionResult> DeleteAsync(string book )
         {
-            var bookRequestDTO = new DeleteBookRequestDTO {BookName = book};
-            await _booksService.DeleteBookAsync(bookRequestDTO);
-            return Ok();
+            var  result = await _booksService.DeleteAsync(book);
+            return Ok(result);
         }
 
     }
