@@ -67,6 +67,24 @@ namespace LibraryManagment.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("LibraryManagment.Models.Loan", b =>
+                {
+                    b.Property<int>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LoanId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MemberId", "BookId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("Loans");
+                });
+
             modelBuilder.Entity("LibraryManagment.Models.Member", b =>
                 {
                     b.Property<int>("MemberID")
@@ -98,12 +116,46 @@ namespace LibraryManagment.Migrations
             modelBuilder.Entity("LibraryManagment.Models.Books", b =>
                 {
                     b.HasOne("LibraryManagment.Models.Category", "BookCategory")
-                        .WithMany()
+                        .WithMany("Books")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("BookCategory");
+                });
+
+            modelBuilder.Entity("LibraryManagment.Models.Loan", b =>
+                {
+                    b.HasOne("LibraryManagment.Models.Books", "Books")
+                        .WithMany("Loans")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LibraryManagment.Models.Member", "Member")
+                        .WithMany("Loans")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Books");
+
+                    b.Navigation("Member");
+                });
+
+            modelBuilder.Entity("LibraryManagment.Models.Books", b =>
+                {
+                    b.Navigation("Loans");
+                });
+
+            modelBuilder.Entity("LibraryManagment.Models.Category", b =>
+                {
+                    b.Navigation("Books");
+                });
+
+            modelBuilder.Entity("LibraryManagment.Models.Member", b =>
+                {
+                    b.Navigation("Loans");
                 });
 #pragma warning restore 612, 618
         }

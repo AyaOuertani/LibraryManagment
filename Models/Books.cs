@@ -8,5 +8,6 @@
         public int Stock { get; set; }
         public int CategoryId { get; set; }
         public Category BookCategory { get; set; }
+        public ICollection<Loan> Loans { get; set; }
     }
 }
