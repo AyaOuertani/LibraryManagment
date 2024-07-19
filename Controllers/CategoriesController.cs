@@ -35,10 +35,10 @@ namespace LibraryManagment.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("Delete/{Delete}")]
-        public async Task<IActionResult> DeleteCategoryAsync(string categoryDeleteName)
+        [HttpDelete("DeleteName/{DeleteName}")]
+        public async Task<IActionResult> DeleteCategoryAsync(string DeleteName)
         {
-            var result =await _categoriesService.DeleteAsync(categoryDeleteName);
+            var result =await _categoriesService.DeleteAsync(DeleteName);
             return Ok(result);
         }
     }

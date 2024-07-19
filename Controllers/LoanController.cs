@@ -1,4 +1,5 @@
-﻿using LibraryManagment.Interface;
+﻿using LibraryManagment.DTOs.LoansDTOs.Request;
+using LibraryManagment.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,16 +14,25 @@ namespace LibraryManagment.Controllers
         {
             _loanService = loanService;
         }
+
         [HttpGet("Name/{Name}")]
         public async Task<IActionResult> GetBooksLoanAync(string Name)
         {
             var result = await _loanService.GetBookLoansAsync(Name);
             return Ok(result);
         }
+
         [HttpGet("id/{id}")]
         public async Task<IActionResult> GetMemberLoanAsync(int id)
         {
             var result = await _loanService.GetMemberLoansAsync(id);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAsyc(AddLoanRequest addLoanRequest)
+        {
+            var result = await _loanService.AddAsync(addLoanRequest);
             return Ok(result);
         }
     }
