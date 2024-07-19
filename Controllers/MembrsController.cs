@@ -9,48 +9,33 @@ namespace LibraryManagment.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    #region Members
     public class MembrsController : ControllerBase
     {
+        #region Variables+Constructor
         private readonly IMemberService _memberServices;
-        
-        public MembrsController(IMemberService memberService)
-        {
-            _memberServices = memberService;
-        }
-        
+
+        public MembrsController(IMemberService memberService) => _memberServices = memberService;
+        #endregion
+        #region Get
         [HttpGet]
-        
-        public IActionResult GetAll() => Ok(_memberServices.GetAll());
-        
-        [HttpGet("id/{id}")]
+        public async Task<IActionResult> GetAllAsync() => Ok(await _memberServices.GetAllAsync());
 
-        public async Task<IActionResult> GetById(int id)
-        {
-            var results = await _memberServices.GetByIdAsync(id);
-            return Ok(results);
-            
-        }
-
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id) => Ok(await _memberServices.GetByIdAsync(id));
+        #endregion
+        #region Post
         [HttpPost]
-
-        public async Task<IActionResult> AddAsync(AddMemberRequest memberRequest)
-        {
-            var result = await _memberServices.AddAsync(memberRequest);
-            return Ok(result);
-        }
-
-        [HttpPut("id/{id}")]
-        public async Task<IActionResult> UpdateAsync(UpdateMemberRequest memberRequest)
-        {
-            var result = await _memberServices.UpdateAsync(memberRequest);
-            return Ok(result);
-        }
-
-        [HttpDelete("id/{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
-        {
-            var result=await _memberServices.DeleteAsync(id);
-            return Ok(result);
-        }
+        public async Task<IActionResult> AddAsync(AddMemberRequest memberRequest) => Ok(await _memberServices.AddAsync(memberRequest));
+        #endregion
+        #region Put
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync(UpdateMemberRequest memberRequest)=> Ok(await _memberServices.UpdateAsync(memberRequest));
+        #endregion
+        #region Delete
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id) => Ok(await _memberServices.DeleteAsync(id));
+        #endregion
     }
+    #endregion
 }

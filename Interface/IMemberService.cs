@@ -9,11 +9,11 @@ namespace LibraryManagment.Interface
 {
     public interface IMemberService
     {
-        public List<Member> GetAll();
+        public Task<IEnumerable<GetAllMembersResponse>> GetAllAsync();
 
         public Task<GetMemberByIdResponse> GetByIdAsync(int id);
 
-        public  Task<string> AddAsync(AddMemberRequest MemberRequest);
+        public  Task<string> AddAsync(AddMemberRequest memberRequest);
 
         public Task<string> UpdateAsync(UpdateMemberRequest updateMember);
 

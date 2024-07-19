@@ -13,5 +13,5 @@ namespace LibraryManagment.Extantions
             services.AddScoped<ILoanService, LoanService>();
             return services;
         }
-     }
+    }
 }

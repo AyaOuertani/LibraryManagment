@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using LibraryManagment.Models;
-using LibraryManagment.DTOs.CategoryDTOs;
+using LibraryManagment.DTOs.CategoriesDTOs.Responses;
+using LibraryManagment.DTOs.CategoriesDTOs.Request;
 
 namespace LibraryManagment.Interface
 {
@@ -10,7 +11,7 @@ namespace LibraryManagment.Interface
 
         public Task<GetAllCategoriesResponse> GetByNameeAsync(string categoryName);
 
-        public Task<string> AddAsync(DTOs.CategoryDTOs.Category category);
+        public Task<string> AddAsync(AddCategoryRequest category);
 
         public Task<string> DeleteAsync(string categoryName);
     }

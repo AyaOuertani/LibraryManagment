@@ -5,7 +5,12 @@ namespace LibraryManagment.Interface
     public interface ILoanService
     {
         public Task<IEnumerable<GetBookLoanResponse>> GetBookLoansAsync(string book);
-        public Task<IEnumerable<GetMemberLoansResponse>> GetMemberLoansAsync(int id );
+
+        public Task<IEnumerable<GetMemberLoansResponse>> GetMemberLoansAsync(int id);
+
         public Task<string> AddAsync(AddLoanRequest addLoanRequest);
+
+        public Task<string> DeleteAsync(int loanId, int memberId);
+
     }
 }
