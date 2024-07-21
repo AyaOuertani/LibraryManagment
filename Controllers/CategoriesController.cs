@@ -16,13 +16,16 @@ namespace LibraryManagment.Controllers
         public CategoriesController(ICategoriesService categoriesService) => _categoriesService = categoriesService;
         #endregion
         #region Get 
+        #region All
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()=> Ok(await _categoriesService.GetAllAsync());
-
+        #endregion
+        #region ByName
         [HttpGet("Name/{Name}")]
         public async Task<IActionResult> GetByNameeAsync(string Name) => Ok(await _categoriesService.GetByNameeAsync(Name));
         #endregion
-        #region Post
+        #endregion
+        #region Post/Add
         [HttpPost]
         public async Task<IActionResult> AddAsync(AddCategoryRequest category) => Ok(await _categoriesService.AddAsync(category));
         #endregion

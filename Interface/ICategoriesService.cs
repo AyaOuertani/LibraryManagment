@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using LibraryManagment.Models;
+﻿using LibraryManagment.DTOs.CategoriesDTOs.Request;
 using LibraryManagment.DTOs.CategoriesDTOs.Responses;
-using LibraryManagment.DTOs.CategoriesDTOs.Request;
 
 namespace LibraryManagment.Interface
 {

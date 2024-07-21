@@ -14,29 +14,34 @@ namespace LibraryManagment.Controllers
         private readonly IBooksService _booksService;
         public BooksController(IBooksService bookService) => _booksService = bookService;
         #endregion
-        #region GetRequest
+        #region Get
+        #region All
         [HttpGet]
         public async Task<IActionResult> GetAllAsync() => Ok(await _booksService.GetAllAsync());
-
+        #endregion
+        #region ById
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id) => Ok(await _booksService.GetByIdAsync(id));
-
+        #endregion
+        #region ByTitle
         [HttpGet("title/{title}")]
         public async Task<IActionResult> GetByTitleAsync(string title) => Ok(await _booksService.GetByTitleAsync(title));
-
+        #endregion
+        #region ByCategory
         [HttpGet("category/{category}")]
         public async Task<IActionResult> GetByCategoryAsync(string category) => Ok(await _booksService.GetByCategoryAsync(category));
-
+        #endregion
+        #region ByAuther
         [HttpGet("auther/{auther}")]
         public async Task<IActionResult> GetByAuthorAsync(string auther) => Ok(await _booksService.GetByAuthorAsync(auther));
-
         #endregion
-        #region PostRequest
+        #endregion
+        #region Post/Add
         [HttpPost]
         public async Task<IActionResult> AddAsync(AddBookRequest bookRequest)  => Ok(await _booksService.AddAsync(bookRequest));
 
         #endregion
-        #region Put
+        #region Put/Update
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(UpdateBookRequest bookRequest) => Ok(await _booksService.UpdateAsync(bookRequest));
 

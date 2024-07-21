@@ -1,9 +1,5 @@
-﻿using LibraryManagment.Data;
-using LibraryManagment.DTOs.MembersDTOs.Requests;
+﻿using LibraryManagment.DTOs.MembersDTOs.Requests;
 using LibraryManagment.DTOs.MembersDTOs.Responses;
-using LibraryManagment.Models;
-using LibraryManagment.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagment.Interface
 {
@@ -13,7 +9,7 @@ namespace LibraryManagment.Interface
 
         public Task<GetMemberByIdResponse> GetByIdAsync(int id);
 
-        public  Task<string> AddAsync(AddMemberRequest memberRequest);
+        public Task<string> AddAsync(AddMemberRequest memberRequest);
 
         public Task<string> UpdateAsync(UpdateMemberRequest updateMember);
 

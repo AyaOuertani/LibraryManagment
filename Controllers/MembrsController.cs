@@ -18,17 +18,20 @@ namespace LibraryManagment.Controllers
         public MembrsController(IMemberService memberService) => _memberServices = memberService;
         #endregion
         #region Get
+        #region All
         [HttpGet]
         public async Task<IActionResult> GetAllAsync() => Ok(await _memberServices.GetAllAsync());
-
+        #endregion
+        #region ById
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id) => Ok(await _memberServices.GetByIdAsync(id));
         #endregion
-        #region Post
+        #endregion
+        #region Post/Add
         [HttpPost]
         public async Task<IActionResult> AddAsync(AddMemberRequest memberRequest) => Ok(await _memberServices.AddAsync(memberRequest));
         #endregion
-        #region Put
+        #region Put/Update
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(UpdateMemberRequest memberRequest)=> Ok(await _memberServices.UpdateAsync(memberRequest));
         #endregion

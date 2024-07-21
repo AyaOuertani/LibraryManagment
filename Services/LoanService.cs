@@ -8,36 +8,35 @@ namespace LibraryManagment.Services
 {
     public class LoanService : ILoanService
     {
+        #region Variable+Constroctor
         private readonly ApplicationDBcontext _dbcontext;
         public LoanService(ApplicationDBcontext dbcontext) => _dbcontext = dbcontext;
+        #endregion
         #region Get
         #region BookLoans
         public async Task<IEnumerable<GetBookLoanResponse>> GetBookLoansAsync(string bookName)
         {
             List<Loan> bookloans = await _dbcontext.Loans.Include(loanSelected => loanSelected.Books)
-                                                  .Include(loanSelected => loanSelected.Member)
-                                                  .Where(loanSelected => loanSelected.Books.Title.ToUpper().Contains(bookName.ToUpper()))
-                                                  .ToListAsync();
-            return (bookloans.Select(loanSelected => new GetBookLoanResponse(
-                                                            loanSelected.LoanId, 
-                                                            loanSelected.Books.Title, 
-                                                            loanSelected.Member.Name)).ToList());
+                                                         .Include(loanSelected => loanSelected.Member)
+                                                         .Where(loanSelected => loanSelected.Books.Title.ToUpper().Contains(bookName.ToUpper())).ToListAsync();
+
+            return (bookloans.Select(loanSelected => new GetBookLoanResponse(loanSelected.LoanId,
+                                                                             loanSelected.Books.Title,
+                                                                             loanSelected.Member.Name)).ToList());
         }
         #endregion
         #region MemberLoans
         public async Task<IEnumerable<GetMemberLoansResponse>> GetMemberLoansAsync(int id)
         {
             List<Loan> memberLoans = await _dbcontext.Loans.Include(loanSelected => loanSelected.Books)
-                                                    .Include(loanSelected => loanSelected.Member)
-                                                    .Where(loanSelected => loanSelected.Member.MemberID == id)
-                                                    .ToListAsync();
+                                                           .Include(loanSelected => loanSelected.Member)
+                                                           .Where(loanSelected => loanSelected.Member.MemberID == id).ToListAsync();
             return (memberLoans.GroupBy(loan => new { loan.LoanId, loan.Member })
                                .Select(group => new GetMemberLoansResponse(group.Key.LoanId,
                                                                            group.Key.Member.Name,
                                                                            group.Key.Member.Phone,
                                                                            group.Key.Member.Email,
-                                                                           group.Select(loan => loan.Books.Title)
-                                                                           .ToList())
+                                                                           group.Select(loan => loan.Books.Title).ToList())
                                )
                     );
         }
@@ -46,7 +45,7 @@ namespace LibraryManagment.Services
         #region Add
         public async Task<string> AddAsync(AddLoanRequest addLoanRequest)
         {
-            Member? member = await _dbcontext.Members.FindAsync(addLoanRequest.MemberID) 
+            Member? member = await _dbcontext.Members.FindAsync(addLoanRequest.MemberID)
                                                      ?? throw new KeyNotFoundException("Not Found !");
 
             List<Books> books = await _dbcontext.Books.Where(bookSelected => addLoanRequest.BookTitle.Contains(bookSelected.Title)).ToListAsync();

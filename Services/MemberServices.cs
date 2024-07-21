@@ -10,22 +10,22 @@ namespace LibraryManagment.Services
 
     public class MemberServices : IMemberService
     {
+        #region Variable+Constroctor
         private readonly ApplicationDBcontext _dbcontext;
 
         public MemberServices(ApplicationDBcontext dbcontext) => _dbcontext = dbcontext;
+        #endregion
         #region Get
         #region All
         public async Task<IEnumerable<GetAllMembersResponse>> GetAllAsync()
         {
             return (await _dbcontext.Members.Include(loan => loan.Loans)
-                                            .Select(memberSelected => new GetAllMembersResponse(
-                                                    memberSelected.MemberID,
-                                                    memberSelected.Name,
-                                                    memberSelected.Age,
-                                                    memberSelected.Email,
-                                                    memberSelected.Phone,
-                                                    memberSelected.Loans.Select(loanSelected => loanSelected.Books.Title).ToList())
-                                            ).ToListAsync());
+                                            .Select(memberSelected => new GetAllMembersResponse(memberSelected.MemberID,
+                                                                                                memberSelected.Name,
+                                                                                                memberSelected.Age,
+                                                                                                memberSelected.Email,
+                                                                                                memberSelected.Phone,
+                                                                                                memberSelected.Loans.Select(loanSelected => loanSelected.Books.Title).ToList())).ToListAsync());
 
         }
         #endregion
@@ -35,12 +35,10 @@ namespace LibraryManagment.Services
             Member? member = await _dbcontext.Members.FindAsync(id);
             return member == null
                 ? throw new KeyNotFoundException("Memeber Not Found")
-                : new GetMemberByIdResponse(
-                      member.Name,
-                      member.Age,
-                      member.Email,
-                      member.Phone
-                );
+                : new GetMemberByIdResponse(member.Name,
+                                            member.Age,
+                                            member.Email,
+                                            member.Phone);
         }
         #endregion
         #endregion
