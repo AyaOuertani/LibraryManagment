@@ -32,8 +32,7 @@ namespace LibraryManagment.Services
                                                            .Include(loanSelected => loanSelected.Member)
                                                            .Where(loanSelected => loanSelected.Member.MemberID == id).ToListAsync();
             return (memberLoans.GroupBy(loan => new { loan.LoanId, loan.Member })
-                               .Select(group => new GetMemberLoansResponse(group.Key.LoanId,
-                                                                           group.Key.Member.Name,
+                               .Select(group => new GetMemberLoansResponse(group.Key.Member.Name,
                                                                            group.Key.Member.Phone,
                                                                            group.Key.Member.Email,
                                                                            group.Select(loan => loan.Books.Title).ToList())

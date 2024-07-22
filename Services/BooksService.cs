@@ -79,7 +79,8 @@ namespace LibraryManagment.Services
         #region Update
         public async Task<string> UpdateAsync(UpdateBookRequest bookRequest)
         {
-            Books book = _dbcontext.Books.Find(bookRequest.Id) ?? throw new KeyNotFoundException("Not Found");
+            Books book = _dbcontext.Books.FirstOrDefault(bookSelected=>bookSelected.Title.ToUpper()==bookRequest.Title.ToUpper()) 
+                                         ?? throw new KeyNotFoundException("Not Found");
             book.Stock = bookRequest.Stock;
             await _dbcontext.SaveChangesAsync();
             return ("Update Successfully");
