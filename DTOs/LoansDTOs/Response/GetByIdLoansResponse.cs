@@ -1,13 +1,12 @@
 ﻿namespace LibraryManagment.DTOs.LoansDTOs.Response
 {
-    public class GetMemberLoansResponse
+    public class GetByIdLoansResponse
     {
-        public int LoanId { get; set; }
         public string MemberName { get; set; } = string.Empty;
         public string PhoneN { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public List<string> BookTitle { get; set; } = new List<string>();
-        public GetMemberLoansResponse(string memberName, string phoneN, string email, List<string> bookTitle)
+        public GetByIdLoansResponse(string memberName, string phoneN, string email, List<string> bookTitle)
         {
             MemberName = memberName;
             PhoneN = phoneN;

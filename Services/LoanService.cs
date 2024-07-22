@@ -13,6 +13,21 @@ namespace LibraryManagment.Services
         public LoanService(ApplicationDBcontext dbcontext) => _dbcontext = dbcontext;
         #endregion
         #region Get
+        #region ByIdLoans
+        public async Task<IEnumerable<GetByIdLoansResponse>> GetByIdLoansAsync(int id)
+        {
+            List<Loan> bookLoans = await _dbcontext.Loans.Include(loanSelected => loanSelected.Books)
+                                                           .Include(loanSelected => loanSelected.Member)
+                                                           .Where(loanSelected => loanSelected.LoanId == id).ToListAsync();
+            return (bookLoans.GroupBy(loan => new { loan.LoanId, loan.Member })
+                               .Select(group => new GetByIdLoansResponse(group.Key.Member.Name,
+                                                                           group.Key.Member.Phone,
+                                                                           group.Key.Member.Email,
+                                                                           group.Select(loan => loan.Books.Title).ToList())
+                               )
+                    );
+        }
+        #endregion
         #region BookLoans
         public async Task<IEnumerable<GetBookLoanResponse>> GetBookLoansAsync(string bookName)
         {

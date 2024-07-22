@@ -14,6 +14,10 @@ namespace LibraryManagment.Controllers
         public LoanController(ILoanService loanService) => _loanService = loanService;
         #endregion
         #region Get
+        #region IdLoans
+        [HttpGet("LoanId/{LoanId}")]
+        public async Task<IActionResult> GetByIdLoanAync(int LoanId) => Ok(await _loanService.GetByIdLoansAsync(LoanId));
+        #endregion
         #region BookLoans
         [HttpGet("Name/{Name}")]
         public async Task<IActionResult> GetBooksLoanAync(string Name) => Ok(await _loanService.GetBookLoansAsync(Name));
