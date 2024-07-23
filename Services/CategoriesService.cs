@@ -33,7 +33,7 @@ namespace LibraryManagment.Services
             Category? category = await _dbcontext.Categories.Include(book => book.Books)
                                                             .FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName.ToUpper() == categoryName.ToUpper()) ?? throw new KeyNotFoundException("Not Found");
             return new GetAllCategoriesResponse(category.CategoryName,
-                                                 category.Books.Select(bookSelected => bookSelected.Title).ToList());
+                                                category.Books.Select(bookSelected => bookSelected.Title).ToList());
 
         }
         #endregion

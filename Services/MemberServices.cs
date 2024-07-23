@@ -16,6 +16,7 @@ namespace LibraryManagment.Services
         #endregion
 
         #region Get
+
         #region All
         public async Task<IEnumerable<GetAllMemberResponse>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
         {
@@ -44,9 +45,11 @@ namespace LibraryManagment.Services
                                             member.Phone);
         }
         #endregion
+
         #endregion
 
         #region Add
+
         public async Task<bool> AddAsync(AddMemberRequest memberRequest)
         {
             _dbcontext.Members.Add(new Member
@@ -59,6 +62,7 @@ namespace LibraryManagment.Services
             await _dbcontext.SaveChangesAsync();
             return (true);
         }
+
         #endregion
 
         #region Update
@@ -66,12 +70,25 @@ namespace LibraryManagment.Services
         {
             Member member = _dbcontext.Members.Find(memberRequest.MemberID)
                                               ?? throw new KeyNotFoundException("Memeber Not Found");
-            if (memberRequest.Age.HasValue && memberRequest.Age != 0)
+            if (memberRequest.Age.HasValue || memberRequest.Age != 0)
             {
                 member.Age = memberRequest.Age.Value;
             }
-            member.Email = memberRequest.Email ?? member.Email;
-            member.Phone = memberRequest.Phone ?? member.Phone;
+            if (memberRequest.Email is null || memberRequest.Email == "string") {
+                member.Email = member.Email;
+            }
+            else
+            {
+                member.Email = memberRequest.Email;
+            }
+            if (memberRequest.Phone is null || memberRequest.Phone == "string")
+            {
+                member.Phone = member.Phone;
+            }
+            else
+            {
+                member.Phone = memberRequest.Phone;
+            }
             await _dbcontext.SaveChangesAsync();
             return (true);
         }

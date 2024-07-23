@@ -13,17 +13,17 @@ namespace LibraryManagment.Services
         #endregion
 
         #region Get
+
         #region All
         public async Task<IEnumerable<GetAllBooksResponse>> GetAllAsync(int pageNumber, int pageSize)
         {
-            IEnumerable<GetAllBooksResponse> books = await _dbcontext.Books.Include(b => b.BookCategory)
-                                                                           .Skip((pageNumber - 1) * pageSize)
-                                                                           .Take(pageSize)
-                                                                           .Select(b => new GetAllBooksResponse(b.Title,
-                                                                                                           b.Author,
-                                                                                                           b.Stock,
-                                                                                                           b.BookCategory.CategoryName)).ToListAsync();
-            return books;
+            return await _dbcontext.Books.Include(b => b.BookCategory)
+                                         .Skip((pageNumber - 1) * pageSize)
+                                         .Take(pageSize)
+                                         .Select(b => new GetAllBooksResponse(b.Title,
+                                                                              b.Author,
+                                                                              b.Stock,
+                                                                              b.BookCategory.CategoryName)).ToListAsync();
         }
         #endregion
 
@@ -59,10 +59,10 @@ namespace LibraryManagment.Services
         {
             Category category = await _dbcontext.Categories.FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName.ToUpper() == categoryName.ToUpper())
                                                             ?? throw new KeyNotFoundException("Not Found");
-            List<Books> books = await _dbcontext.Books.Where(bookSelected => bookSelected.BookCategory.CategoryID == category.CategoryID).ToListAsync();
+            IEnumerable<Books> books = await _dbcontext.Books.Where(bookSelected => bookSelected.BookCategory.CategoryID == category.CategoryID).ToListAsync();
             return books.Select(b => new GetBooksByCategoryResponse(b.Title,
-                                                                   b.Author,
-                                                                   b.Stock)).ToList();
+                                                                    b.Author,
+                                                                    b.Stock)).ToList();
         }
         #endregion
 
@@ -71,14 +71,11 @@ namespace LibraryManagment.Services
         {
             List<Books> book = await _dbcontext.Books.Include(bookSelected => bookSelected.BookCategory)
                                                      .Where(bookSelected => bookSelected.Author.ToUpper() == auther.ToUpper()).ToListAsync();
-            if (book.Count == 0)
-            {
-                throw new KeyNotFoundException("Not Found");
-            }
-            return book.Select(b => new GetBooksByAuthorResponse(b.Title,
-                                                                b.Stock,
-                                                                b.BookCategory.CategoryName)).ToList();
-
+            return book.Count == 0
+                ? throw new KeyNotFoundException("Not Found")
+                : (IEnumerable<GetBooksByAuthorResponse>)book.Select(b => new GetBooksByAuthorResponse(b.Title,
+                                                                                                       b.Stock,
+                                                                                                       b.BookCategory.CategoryName)).ToList();
         }
         #endregion
 

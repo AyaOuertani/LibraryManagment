@@ -20,10 +20,10 @@ namespace LibraryManagment.Services
                                                                 .Include(loanSelected => loanSelected.Member)
                                                                 .Where(loanSelected => loanSelected.LoanId == id).ToListAsync();
             return (bookLoans.GroupBy(loan => new { loan.LoanId, loan.Member })
-                               .Select(group => new GetByIdLoansResponse(group.Key.Member.Name,
-                                                                           group.Key.Member.Phone,
-                                                                           group.Key.Member.Email,
-                                                                           group.Select(loan => loan.Books.Title).ToList())
+                             .Select(group => new GetByIdLoansResponse(group.Key.Member.Name,
+                                                                       group.Key.Member.Phone,
+                                                                       group.Key.Member.Email,
+                                                                       group.Select(loan => loan.Books.Title).ToList())
                                )
                     );
         }
@@ -69,7 +69,7 @@ namespace LibraryManagment.Services
 
             List<string> unavailableBooks = books.Where(book => book.Stock == 0)
                                                  .Select(book => book.Title).ToList();
-            if (unavailableBooks.Any())
+            if (unavailableBooks.Count == 0)
             {
                 return ($"Out of stock: {string.Join(", ", unavailableBooks)}");
             }
