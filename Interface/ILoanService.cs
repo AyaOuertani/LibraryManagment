@@ -1,5 +1,4 @@
-﻿using LibraryManagment.DTOs.LoansDTOs.Request;
-using LibraryManagment.DTOs.LoansDTOs.Response;
+﻿using LibraryManagment.DTOs.LoansDTOs;
 namespace LibraryManagment.Interface
 {
     public interface ILoanService
@@ -11,7 +10,7 @@ namespace LibraryManagment.Interface
 
         public Task<string> AddAsync(AddLoanRequest addLoanRequest);
 
-        public Task<string> DeleteAsync(int loanId, int memberId);
+        public Task<bool> DeleteAsync(int loanId, int memberId);
 
     }
 }

@@ -7,13 +7,15 @@ namespace LibraryManagment.Data
         public ApplicationDBcontext(DbContextOptions options) : base(options)
         {
         }
+
         #region DbSets
         public DbSet<Member> Members { get; set; }
         public DbSet<Books> Books { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Loan> Loans { get; set; }
         #endregion
-        #region Definition
+
+        #region OnModelCreating
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

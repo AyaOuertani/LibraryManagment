@@ -1,6 +1,5 @@
 ﻿using LibraryManagment.Data;
-using LibraryManagment.DTOs.MembersDTOs.Requests;
-using LibraryManagment.DTOs.MembersDTOs.Responses;
+using LibraryManagment.DTOs.MembersDTOs;
 using LibraryManagment.Interface;
 using LibraryManagment.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,17 +9,20 @@ namespace LibraryManagment.Services
 
     public class MemberServices : IMemberService
     {
-        #region Variable+Constroctor
+        #region Variable + Constroctor
         private readonly ApplicationDBcontext _dbcontext;
 
         public MemberServices(ApplicationDBcontext dbcontext) => _dbcontext = dbcontext;
         #endregion
+
         #region Get
         #region All
-        public async Task<IEnumerable<GetAllMembersResponse>> GetAllAsync()
+        public async Task<IEnumerable<GetAllMemberResponse>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
         {
             return (await _dbcontext.Members.Include(loan => loan.Loans)
-                                            .Select(memberSelected => new GetAllMembersResponse(memberSelected.MemberID,
+                                            .Skip((pageNumber - 1) * pageSize)
+                                            .Take(pageSize)
+                                            .Select(memberSelected => new GetAllMemberResponse(memberSelected.MemberID,
                                                                                                 memberSelected.Name,
                                                                                                 memberSelected.Age,
                                                                                                 memberSelected.Email,
@@ -29,6 +31,7 @@ namespace LibraryManagment.Services
 
         }
         #endregion
+
         #region ById
         public async Task<GetMemberByIdResponse> GetByIdAsync(int id)
         {
@@ -42,39 +45,46 @@ namespace LibraryManagment.Services
         }
         #endregion
         #endregion
+
         #region Add
-        public async Task<string> AddAsync(AddMemberRequest memberRequest)
+        public async Task<bool> AddAsync(AddMemberRequest memberRequest)
         {
-            _dbcontext.Members.Add(new Member(
-                                              memberRequest.Name,
-                                              memberRequest.Age,
-                                              memberRequest.Email,
-                                              memberRequest.Phone)
-            );
+            _dbcontext.Members.Add(new Member
+            {
+                Name = memberRequest.Name,
+                Age = memberRequest.Age,
+                Email = memberRequest.Email,
+                Phone = memberRequest.Phone
+            });
             await _dbcontext.SaveChangesAsync();
-            return ("Member added successfully !");
+            return (true);
         }
         #endregion
+
         #region Update
-        public async Task<string> UpdateAsync(UpdateMemberRequest memberRequest)
+        public async Task<bool> UpdateAsync(UpdateMemberRequest memberRequest)
         {
             Member member = _dbcontext.Members.Find(memberRequest.MemberID)
                                               ?? throw new KeyNotFoundException("Memeber Not Found");
-            member.Age = memberRequest.Age;
-            member.Email = memberRequest.Email;
-            member.Phone = memberRequest.Phone;
+            if (memberRequest.Age.HasValue && memberRequest.Age != 0)
+            {
+                member.Age = memberRequest.Age.Value;
+            }
+            member.Email = memberRequest.Email ?? member.Email;
+            member.Phone = memberRequest.Phone ?? member.Phone;
             await _dbcontext.SaveChangesAsync();
-            return ("Member update successfully !");
+            return (true);
         }
         #endregion
+
         #region Delete
-        public async Task<string> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             Member? member = await _dbcontext.Members.FindAsync(id)
                                                      ?? throw new KeyNotFoundException("Member Not Found");
             _dbcontext.Members.Remove(member);
             await _dbcontext.SaveChangesAsync();
-            return ("Deleted Successfully");
+            return (true);
         }
         #endregion
     }

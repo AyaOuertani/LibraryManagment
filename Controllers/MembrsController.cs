@@ -1,10 +1,6 @@
-﻿using LibraryManagment.Data;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using LibraryManagment.Services;
-using LibraryManagment.DTOs.MembersDTOs.Responses;
+﻿using LibraryManagment.DTOs.MembersDTOs;
 using LibraryManagment.Interface;
-using LibraryManagment.DTOs.MembersDTOs.Requests;
+using Microsoft.AspNetCore.Mvc;
 namespace LibraryManagment.Controllers
 {
     [Route("api/[controller]")]
@@ -12,32 +8,46 @@ namespace LibraryManagment.Controllers
     #region Members
     public class MembrsController : ControllerBase
     {
-        #region Variables+Constructor
+        #region Variables + Constructor
         private readonly IMemberService _memberServices;
 
         public MembrsController(IMemberService memberService) => _memberServices = memberService;
         #endregion
+
         #region Get
         #region All
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync() => Ok(await _memberServices.GetAllAsync());
+        public async Task<IActionResult> GetAllAsync(int pageNumber, int pageSize) => Ok(await _memberServices.GetAllAsync(pageNumber, pageSize));
         #endregion
+
         #region ById
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id) => Ok(await _memberServices.GetByIdAsync(id));
         #endregion
         #endregion
+
         #region Post/Add
         [HttpPost]
-        public async Task<IActionResult> AddAsync(AddMemberRequest memberRequest) => Ok(await _memberServices.AddAsync(memberRequest));
+        public async Task<IActionResult> AddAsync(AddMemberRequest memberRequest)
+        {
+            return await _memberServices.AddAsync(memberRequest) ? Ok("Added Successfully!") : NotFound("Failed To Add");
+        }
         #endregion
+
         #region Put/Update
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync(UpdateMemberRequest memberRequest)=> Ok(await _memberServices.UpdateAsync(memberRequest));
+        public async Task<IActionResult> UpdateAsync(UpdateMemberRequest memberRequest)
+        {
+            return (await _memberServices.UpdateAsync(memberRequest) ? Ok("Update Successfully") : NotFound("Failed To Update"));
+        }
         #endregion
+
         #region Delete
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id) => Ok(await _memberServices.DeleteAsync(id));
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            return await _memberServices.DeleteAsync(id) ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
+        }
         #endregion
     }
     #endregion

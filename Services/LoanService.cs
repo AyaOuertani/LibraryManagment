@@ -1,6 +1,5 @@
 ﻿using LibraryManagment.Data;
-using LibraryManagment.DTOs.LoansDTOs.Request;
-using LibraryManagment.DTOs.LoansDTOs.Response;
+using LibraryManagment.DTOs.LoansDTOs;
 using LibraryManagment.Interface;
 using LibraryManagment.Models;
 using Microsoft.EntityFrameworkCore;
@@ -8,17 +7,18 @@ namespace LibraryManagment.Services
 {
     public class LoanService : ILoanService
     {
-        #region Variable+Constroctor
+        #region Variable + Constroctor
         private readonly ApplicationDBcontext _dbcontext;
         public LoanService(ApplicationDBcontext dbcontext) => _dbcontext = dbcontext;
         #endregion
+
         #region Get
         #region ByIdLoans
         public async Task<IEnumerable<GetByIdLoansResponse>> GetByIdLoansAsync(int id)
         {
-            List<Loan> bookLoans = await _dbcontext.Loans.Include(loanSelected => loanSelected.Books)
-                                                           .Include(loanSelected => loanSelected.Member)
-                                                           .Where(loanSelected => loanSelected.LoanId == id).ToListAsync();
+            IEnumerable<Loan> bookLoans = await _dbcontext.Loans.Include(loanSelected => loanSelected.Books)
+                                                                .Include(loanSelected => loanSelected.Member)
+                                                                .Where(loanSelected => loanSelected.LoanId == id).ToListAsync();
             return (bookLoans.GroupBy(loan => new { loan.LoanId, loan.Member })
                                .Select(group => new GetByIdLoansResponse(group.Key.Member.Name,
                                                                            group.Key.Member.Phone,
@@ -28,6 +28,7 @@ namespace LibraryManagment.Services
                     );
         }
         #endregion
+
         #region BookLoans
         public async Task<IEnumerable<GetBookLoanResponse>> GetBookLoansAsync(string bookName)
         {
@@ -40,10 +41,11 @@ namespace LibraryManagment.Services
                                                                              loanSelected.Member.Name)).ToList());
         }
         #endregion
+
         #region MemberLoans
         public async Task<IEnumerable<GetMemberLoansResponse>> GetMemberLoansAsync(int id)
         {
-            List<Loan> memberLoans = await _dbcontext.Loans.Include(loanSelected => loanSelected.Books)
+            IEnumerable<Loan> memberLoans = await _dbcontext.Loans.Include(loanSelected => loanSelected.Books)
                                                            .Include(loanSelected => loanSelected.Member)
                                                            .Where(loanSelected => loanSelected.Member.MemberID == id).ToListAsync();
             return (memberLoans.GroupBy(loan => new { loan.LoanId, loan.Member })
@@ -56,6 +58,7 @@ namespace LibraryManagment.Services
         }
         #endregion
         #endregion
+
         #region Add
         public async Task<string> AddAsync(AddLoanRequest addLoanRequest)
         {
@@ -73,7 +76,11 @@ namespace LibraryManagment.Services
             List<Loan> loans = [];
             foreach (var book in books)
             {
-                loans.Add(new Loan(member.MemberID, book.ID));
+                loans.Add(new Loan
+                {
+                    MemberId = member.MemberID,
+                    BookId = book.ID
+                });
                 book.Stock -= 1;
                 _dbcontext.Books.Update(book);
             }
@@ -82,8 +89,9 @@ namespace LibraryManagment.Services
             return ("Added Successfully");
         }
         #endregion
+
         #region Delete 
-        public async Task<string> DeleteAsync(int loanId, int memberId)
+        public async Task<bool> DeleteAsync(int loanId, int memberId)
         {
             Loan loan = await _dbcontext.Loans.FindAsync(loanId, memberId)
                                               ?? throw new KeyNotFoundException("Not Found");
@@ -92,7 +100,7 @@ namespace LibraryManagment.Services
             _dbcontext.Books.Update(bookLoaned);
             _dbcontext.Loans.Remove(loan);
             await _dbcontext.SaveChangesAsync();
-            return ("Deleted Successfully");
+            return (true);
         }
         #endregion
     }
