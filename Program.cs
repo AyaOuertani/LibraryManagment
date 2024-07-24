@@ -1,9 +1,6 @@
 using LibraryManagment.Data;
-using Microsoft.EntityFrameworkCore;
-using LibraryManagment.Interface;
-using LibraryManagment.Services;
 using LibraryManagment.Extantions;
-using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

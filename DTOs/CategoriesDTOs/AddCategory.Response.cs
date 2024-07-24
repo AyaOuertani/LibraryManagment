@@ -2,7 +2,13 @@
 {
     public class AddCategoryResponse
     {
-        public bool Add {  get; set; }
-        public AddCategoryResponse(bool add = true) => Add = add;
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public AddCategoryResponse(int categoryId, string categoryName)
+        {
+            CategoryId = categoryId;
+            CategoryName = categoryName;
+        }
+
     }
 }

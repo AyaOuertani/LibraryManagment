@@ -18,9 +18,9 @@ namespace LibraryManagment.Services
         #region Get
 
         #region All
-        public async Task<IEnumerable<GetAllMemberResponse>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginatedList<GetAllMemberResponse>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
         {
-            return (await _dbcontext.Members.Include(loan => loan.Loans)
+            List<GetAllMemberResponse> members = await _dbcontext.Members.Include(loan => loan.Loans)
                                             .Skip((pageNumber - 1) * pageSize)
                                             .Take(pageSize)
                                             .Select(memberSelected => new GetAllMemberResponse(memberSelected.MemberID,
@@ -28,7 +28,10 @@ namespace LibraryManagment.Services
                                                                                                 memberSelected.Age,
                                                                                                 memberSelected.Email,
                                                                                                 memberSelected.Phone,
-                                                                                                memberSelected.Loans.Select(loanSelected => loanSelected.Books.Title).ToList())).ToListAsync());
+                                                                                                memberSelected.Loans.Select(loanSelected => loanSelected.Books.Title).ToList())).ToListAsync();
+            int count = await _dbcontext.Books.CountAsync();
+            int totalPages = (int)Math.Ceiling(count / (double)pageSize);
+            return new PaginatedList<GetAllMemberResponse>(members, pageNumber, totalPages);
 
         }
         #endregion
@@ -52,19 +55,17 @@ namespace LibraryManagment.Services
 
         public async Task<AddMemberResponse> AddAsync(AddMemberRequest memberRequest)
         {
-            try
+            Member newMember = new Member
             {
-                _dbcontext.Members.Add(new Member
-                {
-                    Name = memberRequest.Name,
-                    Age = memberRequest.Age,
-                    Email = memberRequest.Email,
-                    Phone = memberRequest.Phone
-                });
-                await _dbcontext.SaveChangesAsync();
-            }
-            catch { return new AddMemberResponse(false); }
-            return new AddMemberResponse();
+                Name = memberRequest.Name,
+                Age = memberRequest.Age,
+                Email = memberRequest.Email,
+                Phone = memberRequest.Phone
+            };
+            _dbcontext.Members.Add(newMember);
+            await _dbcontext.SaveChangesAsync();
+            return new AddMemberResponse(newMember.MemberID, newMember.Name, newMember.Phone);
+
         }
 
         #endregion
@@ -80,17 +81,13 @@ namespace LibraryManagment.Services
             }
             member.Email = memberRequest.Email is null || memberRequest.Email == "string" ? member.Email : memberRequest.Email;
             member.Phone = memberRequest.Phone is null || memberRequest.Phone == "string" ? member.Phone : memberRequest.Phone;
-            try
-            {
-                await _dbcontext.SaveChangesAsync();
-            }
-            catch { return new UpdateMemberResponse(false); }
-            return new UpdateMemberResponse ();
+             await _dbcontext.SaveChangesAsync();
+            return new UpdateMemberResponse(member.MemberID,member.Age, member.Email, member.Phone);
         }
         #endregion
 
         #region Delete
-        public async Task<DeleteMemberResponse> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             Member? member = await _dbcontext.Members.FindAsync(id)
                                                      ?? throw new KeyNotFoundException("Member Not Found");
@@ -99,8 +96,8 @@ namespace LibraryManagment.Services
                 _dbcontext.Members.Remove(member);
                 await _dbcontext.SaveChangesAsync();
             }
-            catch { return new DeleteMemberResponse(false); }
-            return new DeleteMemberResponse ();
+            catch { return false; }
+            return true;
         }
         #endregion
     }

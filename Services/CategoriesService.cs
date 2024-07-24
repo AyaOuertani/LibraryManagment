@@ -15,15 +15,16 @@ namespace LibraryManagment.Services
 
         #region Get
         #region All
-        public async Task<IEnumerable<GetAllCategoriesResponse>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginatedList<GetAllCategoriesResponse>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
         {
-            IEnumerable<GetAllCategoriesResponse> categories = await _dbcontext.Categories.Include(book => book.Books)
-                                                                                           .Skip((pageNumber - 1) * pageSize)
-                                                                                           .Take(pageSize)
-                                                                                           .Select(categorySelected => new GetAllCategoriesResponse(categorySelected.CategoryName,
+            List<GetAllCategoriesResponse> categories = await _dbcontext.Categories.Include(book => book.Books)
+                                                                                   .Skip((pageNumber - 1) * pageSize)
+                                                                                   .Take(pageSize)
+                                                                                   .Select(categorySelected => new GetAllCategoriesResponse(categorySelected.CategoryName,
                                                                                                                                                     categorySelected.Books.Select(bookSelected => bookSelected.Title).ToList())).ToListAsync();
-
-            return categories;
+            int count = await _dbcontext.Books.CountAsync();
+            int totalPages = (int)Math.Ceiling(count / (double)pageSize);
+            return new PaginatedList<GetAllCategoriesResponse>(categories, pageNumber, totalPages);
         }
         #endregion
 
@@ -42,21 +43,17 @@ namespace LibraryManagment.Services
         #region Add
         public async Task<AddCategoryResponse> AddAsync(AddCategoryRequest category)
         {
-            try
-            {
-                _dbcontext.Categories.Add(new Category(category.CategoryName));
-                await _dbcontext.SaveChangesAsync();
-            }
-            catch
-            {
-                return new AddCategoryResponse(false);
-            }
-            return new AddCategoryResponse();
+            Category newCategory = new Category(category.CategoryName);
+             _dbcontext.Categories.Add(newCategory);
+            await _dbcontext.SaveChangesAsync();
+            return new AddCategoryResponse(newCategory.CategoryID,newCategory.CategoryName);
+
+
         }
         #endregion
 
         #region Delete
-        public async Task<DeleteCategoryResponse> DeleteAsync(string categoryName)
+        public async Task<bool> DeleteAsync(string categoryName)
         {
             var category = await _dbcontext.Categories.FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName.ToUpper() == categoryName.ToUpper())
                                                       ?? throw new KeyNotFoundException("Not Found");
@@ -67,9 +64,9 @@ namespace LibraryManagment.Services
             }
             catch
             {
-                return new DeleteCategoryResponse(false);
+                return false;
             }
-            return new DeleteCategoryResponse();
+            return true;
         }
         #endregion
     }

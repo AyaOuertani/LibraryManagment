@@ -1,11 +1,12 @@
 ﻿using LibraryManagment.DTOs.BooksDTOs;
+using LibraryManagment.Models;
 
 
 namespace LibraryManagment.Interface
 {
     public interface IBooksService
     {
-        public Task<IEnumerable<GetAllBooksResponse>> GetAllAsync(int pageNumber , int pageSize);
+        public Task<PaginatedList<GetAllBooksResponse>> GetAllAsync(int pageNumber , int pageSize);
 
         public Task<GetBookByIdResponse> GetByIdAsync(int id);
 
@@ -19,6 +20,6 @@ namespace LibraryManagment.Interface
 
         public Task<UpdateBooksResponse> UpdateAsync(UpdateBooksRequest bookRequest);
 
-        public Task<DeleteBookResponse> DeleteAsync(string bookName);
+        public Task<bool> DeleteAsync(string bookName);
     }
 }

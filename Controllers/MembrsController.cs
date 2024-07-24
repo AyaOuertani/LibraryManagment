@@ -17,7 +17,7 @@ namespace LibraryManagment.Controllers
         #region Get
         #region All
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync(int pageNumber, int pageSize) => Ok(await _memberServices.GetAllAsync(pageNumber, pageSize));
+        public async Task<IActionResult> GetAllAsync(int pageNumber = 1, int pageSize = 10) => Ok(await _memberServices.GetAllAsync(pageNumber, pageSize));
         #endregion
 
         #region ById
@@ -30,7 +30,7 @@ namespace LibraryManagment.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync(AddMemberRequest memberRequest)
         {
-            return (await _memberServices.AddAsync(memberRequest)).Add ? Ok("Added Successfully!") : NotFound("Failed To Add");
+            return Ok(await _memberServices.AddAsync(memberRequest));
         }
         #endregion
 
@@ -38,7 +38,7 @@ namespace LibraryManagment.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(UpdateMemberRequest memberRequest)
         {
-            return (await _memberServices.UpdateAsync(memberRequest)).Update ? Ok("Update Successfully") : NotFound("Failed To Update");
+            return Ok(await _memberServices.UpdateAsync(memberRequest));
         }
         #endregion
 
@@ -46,7 +46,7 @@ namespace LibraryManagment.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            return (await _memberServices.DeleteAsync(id)).Delete ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
+            return (await _memberServices.DeleteAsync(id)) ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
         }
         #endregion
     }

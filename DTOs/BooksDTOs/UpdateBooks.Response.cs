@@ -2,7 +2,14 @@
 {
     public class UpdateBooksResponse
     {
-        public bool Update { get; set; }
-        public UpdateBooksResponse(bool update = true) => Update = update;
+        public int ID { get; set; }
+        public string Title { get; set; }
+        public int Stock {  get; set; }
+        public UpdateBooksResponse(int iD, string title, int stock)
+        {
+            ID = iD;
+            Title = title;
+            Stock = stock;
+        }
     }
 }

@@ -86,12 +86,13 @@ namespace LibraryManagment.Services
             }
             await _dbcontext.Loans.AddRangeAsync(loans);
             await _dbcontext.SaveChangesAsync();
+
             return ("Added Successfully");
         }
         #endregion
 
         #region Delete 
-        public async Task<DeleteLoanResponse> DeleteAsync(int loanId, int memberId)
+        public async Task<bool> DeleteAsync(int loanId, int memberId)
         {
             Loan loan = await _dbcontext.Loans.FindAsync(loanId, memberId)
                                               ?? throw new KeyNotFoundException("Not Found");
@@ -103,8 +104,8 @@ namespace LibraryManagment.Services
                 _dbcontext.Loans.Remove(loan);
                 await _dbcontext.SaveChangesAsync();
             }
-            catch {return new DeleteLoanResponse(false); }
-            return new DeleteLoanResponse();
+            catch {return false; }
+            return true;
         }
         #endregion
     }

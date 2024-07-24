@@ -18,7 +18,7 @@ namespace LibraryManagment.Controllers
         #region Get
         #region All
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync(int pageNumber, int pageSize) => Ok(await _booksService.GetAllAsync(pageNumber, pageSize));
+        public async Task<IActionResult> GetAllAsync(int pageNumber = 1, int pageSize = 10) => Ok(await _booksService.GetAllAsync(pageNumber, pageSize));
         #endregion
 
         #region ById
@@ -48,7 +48,7 @@ namespace LibraryManagment.Controllers
         public async Task<IActionResult> AddAsync(AddBookRequest bookRequest)
         {
 
-            return  (await _booksService.AddAsync(bookRequest)).Add ? Ok("Book Added Successfully!") : NotFound("Impossible To Add");
+            return Ok(await _booksService.AddAsync(bookRequest));
         }
 
         #endregion
@@ -57,7 +57,7 @@ namespace LibraryManagment.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(UpdateBooksRequest bookRequest)
         {
-            return (await _booksService.UpdateAsync(bookRequest)).Update ? Ok("Update Successfully") : NotFound("Impossible To Update");
+            return Ok(await _booksService.UpdateAsync(bookRequest));
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace LibraryManagment.Controllers
         [HttpDelete("book/{book}")]
         public async Task<IActionResult> DeleteAsync(string book)
         {
-            return (await _booksService.DeleteAsync(book)).Delete ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
+            return (await _booksService.DeleteAsync(book)) ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
         }
         #endregion
     }

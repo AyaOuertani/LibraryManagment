@@ -15,15 +15,19 @@ namespace LibraryManagment.Services
         #region Get
 
         #region All
-        public async Task<IEnumerable<GetAllBooksResponse>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<PaginatedList<GetAllBooksResponse>> GetAllAsync(int pageNumber, int pageSize)
         {
-            return await _dbcontext.Books.Include(b => b.BookCategory)
-                                         .Skip((pageNumber - 1) * pageSize)
-                                         .Take(pageSize)
-                                         .Select(b => new GetAllBooksResponse(b.Title,
-                                                                              b.Author,
-                                                                              b.Stock,
-                                                                              b.BookCategory.CategoryName)).ToListAsync();
+            List<GetAllBooksResponse> books = await _dbcontext.Books.Include(b => b.BookCategory)
+                                                                    .Skip((pageNumber - 1) * pageSize)
+                                                                    .Take(pageSize)
+                                                                    .Select(b => new GetAllBooksResponse(b.Title,
+                                                                                                         b.Author,
+                                                                                                         b.Stock,
+                                                                                                         b.BookCategory.CategoryName)).ToListAsync();
+
+            int count = await _dbcontext.Books.CountAsync();
+            int totalPages = (int)Math.Ceiling(count / (double)pageSize);
+            return new PaginatedList<GetAllBooksResponse>(books, pageNumber, totalPages);
         }
         #endregion
 
@@ -90,15 +94,9 @@ namespace LibraryManagment.Services
             {
                 book.Stock = bookRequest.Stock.Value;
             }
-            try
-            {
-                await _dbcontext.SaveChangesAsync();
-            }
-            catch
-            {
-                return new UpdateBooksResponse(false);
-            }
-            return new UpdateBooksResponse();
+            await _dbcontext.SaveChangesAsync();
+            return new UpdateBooksResponse(book.ID,book.Title,book.Stock);
+
         }
         #endregion
 
@@ -107,27 +105,22 @@ namespace LibraryManagment.Services
         {
             Category category = await _dbcontext.Categories.FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName.ToUpper() == bookRequest.BookCategory.CategoryName.ToUpper())
                                                            ?? throw new KeyNotFoundException("Category not found");
-            try
+            Books newBook = new Books
             {
-                _dbcontext.Books.Add(new Books
-                {
-                    Title = bookRequest.Title,
-                    Author = bookRequest.Author,
-                    Stock = bookRequest.Stock,
-                    BookCategory = category
-                });
-                await _dbcontext.SaveChangesAsync();
-            }
-            catch
-            {
-                return new AddBookResponse(false);
-            }
-            return new AddBookResponse();
+                Title = bookRequest.Title,
+                Author = bookRequest.Author,
+                Stock = bookRequest.Stock,
+                BookCategory = category
+            };
+
+            _dbcontext.Books.Add(newBook);
+            await _dbcontext.SaveChangesAsync();
+            return new AddBookResponse(newBook.ID, newBook.Title);
         }
         #endregion
 
         #region Delete
-        public async Task<DeleteBookResponse> DeleteAsync(string bookName)
+        public async Task<bool> DeleteAsync(string bookName)
         {
             Books book = await _dbcontext.Books.FirstOrDefaultAsync(BookSelected => BookSelected.Title.ToUpper() == bookName.ToUpper())
                                                ?? throw new KeyNotFoundException("Not Found");
@@ -136,8 +129,8 @@ namespace LibraryManagment.Services
                 _dbcontext.Books.Remove(book);
                 await _dbcontext.SaveChangesAsync();
             }
-            catch { return new DeleteBookResponse(false); }
-            return new DeleteBookResponse();
+            catch { return false; }
+            return true;
         }
         #endregion
     }

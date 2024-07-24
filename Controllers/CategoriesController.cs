@@ -17,7 +17,7 @@ namespace LibraryManagment.Controllers
         #region Get 
         #region All
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync(int pageNumber, int pageSize) => Ok(await _categoriesService.GetAllAsync(pageNumber, pageSize));
+        public async Task<IActionResult> GetAllAsync(int pageNumber = 1, int pageSize = 10) => Ok(await _categoriesService.GetAllAsync(pageNumber, pageSize));
         #endregion
 
         #region ByName
@@ -30,7 +30,7 @@ namespace LibraryManagment.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync(AddCategoryRequest category)
         {
-            return (await _categoriesService.AddAsync(category)).Add ? Ok("Added Successfully!") : NotFound("Failed To Add");
+            return Ok(await _categoriesService.AddAsync(category));
         }
         #endregion
 
@@ -38,7 +38,7 @@ namespace LibraryManagment.Controllers
         [HttpDelete("DeleteName/{DeleteName}")]
         public async Task<IActionResult> DeleteCategoryAsync(string DeleteName)
         {
-            return (await _categoriesService.DeleteAsync(DeleteName)).Delete ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
+            return (await _categoriesService.DeleteAsync(DeleteName)) ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
         }
         #endregion
     }

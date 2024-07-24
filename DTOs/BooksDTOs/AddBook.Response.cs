@@ -1,10 +1,13 @@
-﻿using LibraryManagment.Models;
-
-namespace LibraryManagment.DTOs.BooksDTOs
+﻿namespace LibraryManagment.DTOs.BooksDTOs
 {
     public class AddBookResponse
     {
-        public bool Add {  get; set; }
-        public AddBookResponse(bool add = true) => Add = add;
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public AddBookResponse(int id, string title)
+        {
+            Id = id;
+            Title = title;
+        }
     }
 }

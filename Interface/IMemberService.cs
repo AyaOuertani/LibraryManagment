@@ -1,11 +1,12 @@
 ﻿using LibraryManagment.DTOs.MembersDTOs;
+using LibraryManagment.Models;
 
 
 namespace LibraryManagment.Interface
 {
     public interface IMemberService
     {
-        public Task<IEnumerable<GetAllMemberResponse>> GetAllAsync(int pageNumber,int pageSize);
+        public Task<PaginatedList<GetAllMemberResponse>> GetAllAsync(int pageNumber,int pageSize);
 
         public Task<GetMemberByIdResponse> GetByIdAsync(int id);
 
@@ -13,7 +14,7 @@ namespace LibraryManagment.Interface
 
         public Task<UpdateMemberResponse> UpdateAsync(UpdateMemberRequest updateMember);
 
-        public Task<DeleteMemberResponse> DeleteAsync(int id);
+        public Task<bool> DeleteAsync(int id);
 
     }
 }
