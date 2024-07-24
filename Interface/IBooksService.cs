@@ -15,10 +15,10 @@ namespace LibraryManagment.Interface
 
         public Task<IEnumerable<GetBooksByAuthorResponse>> GetByAuthorAsync(string auther);
 
-        public Task<bool> AddAsync(AddBookRequest bookRequest);
+        public Task<AddBookResponse> AddAsync(AddBookRequest bookRequest);
 
-        public Task<bool> UpdateAsync(UpdateBooksRequest bookRequest);
+        public Task<UpdateBooksResponse> UpdateAsync(UpdateBooksRequest bookRequest);
 
-        public Task<bool> DeleteAsync(string bookName);
+        public Task<DeleteBookResponse> DeleteAsync(string bookName);
     }
 }

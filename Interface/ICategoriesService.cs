@@ -8,9 +8,9 @@ namespace LibraryManagment.Interface
 
         public Task<GetAllCategoriesResponse> GetByNameeAsync(string categoryName);
 
-        public Task<bool> AddAsync(AddCategoryRequest category);
+        public Task<AddCategoryResponse> AddAsync(AddCategoryRequest category);
 
-        public Task<bool> DeleteAsync(string categoryName);
+        public Task<DeleteCategoryResponse> DeleteAsync(string categoryName);
     }
 
 }

@@ -9,11 +9,11 @@ namespace LibraryManagment.Interface
 
         public Task<GetMemberByIdResponse> GetByIdAsync(int id);
 
-        public Task<bool> AddAsync(AddMemberRequest memberRequest);
+        public Task<AddMemberResponse> AddAsync(AddMemberRequest memberRequest);
 
-        public Task<bool> UpdateAsync(UpdateMemberRequest updateMember);
+        public Task<UpdateMemberResponse> UpdateAsync(UpdateMemberRequest updateMember);
 
-        public Task<bool> DeleteAsync(int id);
+        public Task<DeleteMemberResponse> DeleteAsync(int id);
 
     }
 }

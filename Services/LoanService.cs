@@ -91,16 +91,20 @@ namespace LibraryManagment.Services
         #endregion
 
         #region Delete 
-        public async Task<bool> DeleteAsync(int loanId, int memberId)
+        public async Task<DeleteLoanResponse> DeleteAsync(int loanId, int memberId)
         {
             Loan loan = await _dbcontext.Loans.FindAsync(loanId, memberId)
                                               ?? throw new KeyNotFoundException("Not Found");
             Books? bookLoaned = await _dbcontext.Books.FindAsync(loan.BookId);
             bookLoaned.Stock += 1;
-            _dbcontext.Books.Update(bookLoaned);
-            _dbcontext.Loans.Remove(loan);
-            await _dbcontext.SaveChangesAsync();
-            return (true);
+            try
+            {
+                _dbcontext.Books.Update(bookLoaned);
+                _dbcontext.Loans.Remove(loan);
+                await _dbcontext.SaveChangesAsync();
+            }
+            catch {return new DeleteLoanResponse(false); }
+            return new DeleteLoanResponse();
         }
         #endregion
     }

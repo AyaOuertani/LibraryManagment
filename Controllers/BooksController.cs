@@ -48,7 +48,7 @@ namespace LibraryManagment.Controllers
         public async Task<IActionResult> AddAsync(AddBookRequest bookRequest)
         {
 
-            return await _booksService.AddAsync(bookRequest) ? Ok("Book Added Successfully!") : NotFound("Impossible To Add");
+            return  (await _booksService.AddAsync(bookRequest)).Add ? Ok("Book Added Successfully!") : NotFound("Impossible To Add");
         }
 
         #endregion
@@ -57,7 +57,7 @@ namespace LibraryManagment.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(UpdateBooksRequest bookRequest)
         {
-            return await _booksService.UpdateAsync(bookRequest) ? Ok("Update Successfully") : NotFound("Impossible To Update");
+            return (await _booksService.UpdateAsync(bookRequest)).Update ? Ok("Update Successfully") : NotFound("Impossible To Update");
         }
 
         #endregion
@@ -66,7 +66,7 @@ namespace LibraryManagment.Controllers
         [HttpDelete("book/{book}")]
         public async Task<IActionResult> DeleteAsync(string book)
         {
-            return await _booksService.DeleteAsync(book) ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
+            return (await _booksService.DeleteAsync(book)).Delete ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
         }
         #endregion
     }

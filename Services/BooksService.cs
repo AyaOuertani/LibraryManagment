@@ -82,7 +82,7 @@ namespace LibraryManagment.Services
         #endregion
 
         #region Update
-        public async Task<bool> UpdateAsync(UpdateBooksRequest bookRequest)
+        public async Task<UpdateBooksResponse> UpdateAsync(UpdateBooksRequest bookRequest)
         {
             Books book = _dbcontext.Books.FirstOrDefault(bookSelected => bookSelected.Title.ToUpper() == bookRequest.Title.ToUpper())
                                          ?? throw new KeyNotFoundException("Not Found");
@@ -90,36 +90,54 @@ namespace LibraryManagment.Services
             {
                 book.Stock = bookRequest.Stock.Value;
             }
-            await _dbcontext.SaveChangesAsync();
-            return (true);
+            try
+            {
+                await _dbcontext.SaveChangesAsync();
+            }
+            catch
+            {
+                return new UpdateBooksResponse(false);
+            }
+            return new UpdateBooksResponse();
         }
         #endregion
 
         #region Add
-        public async Task<bool> AddAsync(AddBookRequest bookRequest)
+        public async Task<AddBookResponse> AddAsync(AddBookRequest bookRequest)
         {
             Category category = await _dbcontext.Categories.FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName.ToUpper() == bookRequest.BookCategory.CategoryName.ToUpper())
                                                            ?? throw new KeyNotFoundException("Category not found");
-            _dbcontext.Books.Add(new Books
+            try
             {
-                Title = bookRequest.Title,
-                Author = bookRequest.Author,
-                Stock = bookRequest.Stock,
-                BookCategory = category
-            });
-            await _dbcontext.SaveChangesAsync();
-            return true;
+                _dbcontext.Books.Add(new Books
+                {
+                    Title = bookRequest.Title,
+                    Author = bookRequest.Author,
+                    Stock = bookRequest.Stock,
+                    BookCategory = category
+                });
+                await _dbcontext.SaveChangesAsync();
+            }
+            catch
+            {
+                return new AddBookResponse(false);
+            }
+            return new AddBookResponse();
         }
         #endregion
 
         #region Delete
-        public async Task<bool> DeleteAsync(string bookName)
+        public async Task<DeleteBookResponse> DeleteAsync(string bookName)
         {
             Books book = await _dbcontext.Books.FirstOrDefaultAsync(BookSelected => BookSelected.Title.ToUpper() == bookName.ToUpper())
                                                ?? throw new KeyNotFoundException("Not Found");
-            _dbcontext.Books.Remove(book);
-            await _dbcontext.SaveChangesAsync();
-            return (true);
+            try
+            {
+                _dbcontext.Books.Remove(book);
+                await _dbcontext.SaveChangesAsync();
+            }
+            catch { return new DeleteBookResponse(false); }
+            return new DeleteBookResponse();
         }
         #endregion
     }

@@ -30,7 +30,7 @@ namespace LibraryManagment.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync(AddMemberRequest memberRequest)
         {
-            return await _memberServices.AddAsync(memberRequest) ? Ok("Added Successfully!") : NotFound("Failed To Add");
+            return (await _memberServices.AddAsync(memberRequest)).Add ? Ok("Added Successfully!") : NotFound("Failed To Add");
         }
         #endregion
 
@@ -38,7 +38,7 @@ namespace LibraryManagment.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync(UpdateMemberRequest memberRequest)
         {
-            return (await _memberServices.UpdateAsync(memberRequest) ? Ok("Update Successfully") : NotFound("Failed To Update"));
+            return (await _memberServices.UpdateAsync(memberRequest)).Update ? Ok("Update Successfully") : NotFound("Failed To Update");
         }
         #endregion
 
@@ -46,7 +46,7 @@ namespace LibraryManagment.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            return await _memberServices.DeleteAsync(id) ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
+            return (await _memberServices.DeleteAsync(id)).Delete ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
         }
         #endregion
     }

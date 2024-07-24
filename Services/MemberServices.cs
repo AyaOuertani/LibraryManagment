@@ -50,58 +50,57 @@ namespace LibraryManagment.Services
 
         #region Add
 
-        public async Task<bool> AddAsync(AddMemberRequest memberRequest)
+        public async Task<AddMemberResponse> AddAsync(AddMemberRequest memberRequest)
         {
-            _dbcontext.Members.Add(new Member
+            try
             {
-                Name = memberRequest.Name,
-                Age = memberRequest.Age,
-                Email = memberRequest.Email,
-                Phone = memberRequest.Phone
-            });
-            await _dbcontext.SaveChangesAsync();
-            return (true);
+                _dbcontext.Members.Add(new Member
+                {
+                    Name = memberRequest.Name,
+                    Age = memberRequest.Age,
+                    Email = memberRequest.Email,
+                    Phone = memberRequest.Phone
+                });
+                await _dbcontext.SaveChangesAsync();
+            }
+            catch { return new AddMemberResponse(false); }
+            return new AddMemberResponse();
         }
 
         #endregion
 
         #region Update
-        public async Task<bool> UpdateAsync(UpdateMemberRequest memberRequest)
+        public async Task<UpdateMemberResponse> UpdateAsync(UpdateMemberRequest memberRequest)
         {
             Member member = _dbcontext.Members.Find(memberRequest.MemberID)
                                               ?? throw new KeyNotFoundException("Memeber Not Found");
-            if (memberRequest.Age.HasValue || memberRequest.Age != 0)
+            if (memberRequest.Age.HasValue && memberRequest.Age != 0)
             {
                 member.Age = memberRequest.Age.Value;
             }
-            if (memberRequest.Email is null || memberRequest.Email == "string") {
-                member.Email = member.Email;
-            }
-            else
+            member.Email = memberRequest.Email is null || memberRequest.Email == "string" ? member.Email : memberRequest.Email;
+            member.Phone = memberRequest.Phone is null || memberRequest.Phone == "string" ? member.Phone : memberRequest.Phone;
+            try
             {
-                member.Email = memberRequest.Email;
+                await _dbcontext.SaveChangesAsync();
             }
-            if (memberRequest.Phone is null || memberRequest.Phone == "string")
-            {
-                member.Phone = member.Phone;
-            }
-            else
-            {
-                member.Phone = memberRequest.Phone;
-            }
-            await _dbcontext.SaveChangesAsync();
-            return (true);
+            catch { return new UpdateMemberResponse(false); }
+            return new UpdateMemberResponse ();
         }
         #endregion
 
         #region Delete
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<DeleteMemberResponse> DeleteAsync(int id)
         {
             Member? member = await _dbcontext.Members.FindAsync(id)
                                                      ?? throw new KeyNotFoundException("Member Not Found");
-            _dbcontext.Members.Remove(member);
-            await _dbcontext.SaveChangesAsync();
-            return (true);
+            try
+            {
+                _dbcontext.Members.Remove(member);
+                await _dbcontext.SaveChangesAsync();
+            }
+            catch { return new DeleteMemberResponse(false); }
+            return new DeleteMemberResponse ();
         }
         #endregion
     }

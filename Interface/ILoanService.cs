@@ -10,7 +10,7 @@ namespace LibraryManagment.Interface
 
         public Task<string> AddAsync(AddLoanRequest addLoanRequest);
 
-        public Task<bool> DeleteAsync(int loanId, int memberId);
+        public Task<DeleteLoanResponse> DeleteAsync(int loanId, int memberId);
 
     }
 }

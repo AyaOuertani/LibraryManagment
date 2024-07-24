@@ -40,7 +40,7 @@ namespace LibraryManagment.Controllers
         [HttpDelete("{loanId}/{memberId}")]
         public async Task<IActionResult> DeleteAsync(int loanId, int memberId)
         {
-            return await _loanService.DeleteAsync(loanId, memberId) ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
+            return (await _loanService.DeleteAsync(loanId, memberId)).Delete ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
         }
         #endregion
     }

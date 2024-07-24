@@ -15,7 +15,7 @@ namespace LibraryManagment.Services
 
         #region Get
         #region All
-        public async Task<IEnumerable<GetAllCategoriesResponse>> GetAllAsync(int pageNumber = 1,int pageSize=10)
+        public async Task<IEnumerable<GetAllCategoriesResponse>> GetAllAsync(int pageNumber = 1, int pageSize = 10)
         {
             IEnumerable<GetAllCategoriesResponse> categories = await _dbcontext.Categories.Include(book => book.Books)
                                                                                            .Skip((pageNumber - 1) * pageSize)
@@ -40,22 +40,36 @@ namespace LibraryManagment.Services
         #endregion
 
         #region Add
-        public async Task<bool> AddAsync(AddCategoryRequest category)
+        public async Task<AddCategoryResponse> AddAsync(AddCategoryRequest category)
         {
-            _dbcontext.Categories.Add(new Category(category.CategoryName));
-            await _dbcontext.SaveChangesAsync();
-            return true;
+            try
+            {
+                _dbcontext.Categories.Add(new Category(category.CategoryName));
+                await _dbcontext.SaveChangesAsync();
+            }
+            catch
+            {
+                return new AddCategoryResponse(false);
+            }
+            return new AddCategoryResponse();
         }
         #endregion
 
         #region Delete
-        public async Task<bool> DeleteAsync(string categoryName)
+        public async Task<DeleteCategoryResponse> DeleteAsync(string categoryName)
         {
             var category = await _dbcontext.Categories.FirstOrDefaultAsync(categorySelected => categorySelected.CategoryName.ToUpper() == categoryName.ToUpper())
                                                       ?? throw new KeyNotFoundException("Not Found");
-            _dbcontext.Categories.Remove(category);
-            await _dbcontext.SaveChangesAsync();
-            return (true);
+            try
+            {
+                _dbcontext.Categories.Remove(category);
+                await _dbcontext.SaveChangesAsync();
+            }
+            catch
+            {
+                return new DeleteCategoryResponse(false);
+            }
+            return new DeleteCategoryResponse();
         }
         #endregion
     }

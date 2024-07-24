@@ -30,7 +30,7 @@ namespace LibraryManagment.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAsync(AddCategoryRequest category)
         {
-            return await _categoriesService.AddAsync(category) ? Ok("Added Successfully!") : NotFound("Failed To Add");
+            return (await _categoriesService.AddAsync(category)).Add ? Ok("Added Successfully!") : NotFound("Failed To Add");
         }
         #endregion
 
@@ -38,7 +38,7 @@ namespace LibraryManagment.Controllers
         [HttpDelete("DeleteName/{DeleteName}")]
         public async Task<IActionResult> DeleteCategoryAsync(string DeleteName)
         {
-            return await _categoriesService.DeleteAsync(DeleteName) ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
+            return (await _categoriesService.DeleteAsync(DeleteName)).Delete ? Ok("Deleted Successfully") : NotFound("Failed To Delete");
         }
         #endregion
     }
